@@ -17,7 +17,7 @@ jobs:
     - name: start app with docker compose
       run: docker-compose up
   test:
-    - name: run tests
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: wait for docker compose
