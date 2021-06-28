@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install dev dependencies 
-      run: npm install --only=dev
+      run: npm install
     - name: wait for docker compose
       run: sleep 180
     - name: run tests
