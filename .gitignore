@@ -1,5 +1,7 @@
 docs/_book
 npm-debug.log
-vars.env
 .dev/
 coverage/
+node_modules
+coverage
+package-lock.json
