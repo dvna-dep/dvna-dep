@@ -16,6 +16,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: start app with docker compose
-      run: docker compose up
+      run: docker-compose up
     - name: run tests
       run: npm test
