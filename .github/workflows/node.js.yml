@@ -11,11 +11,16 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: start app with docker compose
       run: docker-compose up
+  test:
+    - name: run tests
+    steps:
+    - uses: actions/checkout@v2
+    - name: wait for docker compose
+      run: sleep 180
     - name: run tests
       run: npm test
