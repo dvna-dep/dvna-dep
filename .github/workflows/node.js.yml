@@ -14,21 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: start app with docker compose
-      run: docker-compose up
-      timeout-minutes: 5
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: install dev dependencies 
-      run: npm install
-      continue-on-error: true
-    - name: wait for docker compose
-      run: sleep 180
-    - name: run tests
-      run: npm test
-      continue-on-error: true
+    - name: start app in background with docker compose
+      run: docker-compose up -d
+    - name: wait for app to spin up, run npm tests
+      run: sleep 120; npm test
     - name: stop docker containers
-      run: docker stop dvna-dep_mysql-db_1 dvna-dep_app_1
-      
+      run: docker stop dvna-dep_app_1; docker stop dvna-dep_mysql-db_1
