@@ -205,7 +205,7 @@ module.exports.calc = function (req, res) {
 
 
 // --- A3 Sensitive Data Exposure ---
-function listUsersAPIRating0 (){ 
+function listUsersAPIRating0(res){ 
 	return db.User.findAll({}).then(users => {
 		res.status(200).json({
 			success: true,
@@ -213,7 +213,7 @@ function listUsersAPIRating0 (){
 		})
 	})
 }
-function listUsersAPIRating1() {
+function listUsersAPIRating1(res) {
 	return db.User.findAll({ attributes: ['id', 'name', 'email'] },)
 	.then(users => {
 		res.status(200).json({
@@ -226,9 +226,9 @@ function listUsersAPIRating1() {
 module.exports.listUsersAPI = function (req, res) {
 	var securityRating = req.query.securityRating ? req.query.securityRating : 0;
 	if (securityRating == 0 ){
-		listUsersAPIRating0();
+		listUsersAPIRating0(res);
 	} else if (securityRating == 1) {
-		listUsersAPIRating1();
+		listUsersAPIRating1(res);
 	};
 }
 
