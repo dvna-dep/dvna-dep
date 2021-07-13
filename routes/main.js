@@ -13,9 +13,7 @@ module.exports = function (passport) {
 	})
 
 	router.get('/learn/vulnerability/:vuln', authHandler.isAuthenticated, function (req, res) {
-		if (req.query.securityRating){
-			console.log("In backend: ", req.query.securityRating)
-		}
+		var query_rating = req.query.securityRating ? req.query.securityRating : 0;
 		res.render('vulnerabilities/layout', {
 			vuln: req.params.vuln,
 			vuln_title: vulnDict[req.params.vuln],
@@ -23,7 +21,8 @@ module.exports = function (passport) {
 			vuln_description: req.params.vuln + '/description',
 			vuln_reference: req.params.vuln + '/reference',
 			vulnerabilities:vulnDict,
-			ratings: ratingsDict[req.params.vuln]
+			ratings: ratingsDict[req.params.vuln],
+			securityRating: query_rating
 		}, function (err, html) {
 			if (err) {
 				console.log(err)
