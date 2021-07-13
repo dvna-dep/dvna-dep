@@ -63,8 +63,9 @@
                    }
                 }
             };
-
-            xmlhttp.open("GET", "/app/admin/usersapi", true);
+            var urlParams = new URLSearchParams(window.location.search);
+            var securityRating = urlParams.get('securityRating') 
+            xmlhttp.open("GET", "/app/admin/usersapi/" + securityRating, true);
             xmlhttp.send();
         }
         loadUsers();
