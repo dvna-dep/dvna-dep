@@ -224,7 +224,7 @@ function listUsersAPIRating1(res) {
 }
 
 module.exports.listUsersAPI = function (req, res) {
-	var securityRating = req.query.securityRating ? req.query.securityRating : 0;
+	var securityRating = req.params.securityRating ? req.params.securityRating : 0;
 	if (securityRating == 0 ){
 		listUsersAPIRating0(res);
 	} else if (securityRating == 1) {
