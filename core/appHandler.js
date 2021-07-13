@@ -203,13 +203,33 @@ module.exports.calc = function (req, res) {
 	}
 }
 
-module.exports.listUsersAPI = function (req, res) {
-	db.User.findAll({}).then(users => {
+
+// --- A3 Sensitive Data Exposure ---
+function listUsersAPIRating0(res){ 
+	return db.User.findAll({}).then(users => {
 		res.status(200).json({
 			success: true,
 			users: users
 		})
 	})
+}
+function listUsersAPIRating1(res) {
+	return db.User.findAll({ attributes: ['id', 'name', 'email'] },)
+	.then(users => {
+		res.status(200).json({
+			success: true,
+			users: users
+		})
+	});
+}
+
+module.exports.listUsersAPI = function (req, res) {
+	var securityRating = req.params.securityRating ? req.params.securityRating : 0;
+	if (securityRating == 0 ){
+		listUsersAPIRating0(res);
+	} else if (securityRating == 1) {
+		listUsersAPIRating1(res);
+	};
 }
 
 module.exports.bulkProductsLegacy = function (req,res){

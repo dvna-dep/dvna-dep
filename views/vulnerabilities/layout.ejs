@@ -29,16 +29,21 @@
             </div>
         </div>
         <div class='col-md-9'>
-            <h3><%=vuln_title%></h3>
+                <h3><%=vuln_title%></h3>
+                <h4>Scenario</h4>
+                <div> 
+                    The security rating for this scenario is at Level <%= securityRating %>. 
+                </div>
+                <%- include(vuln_scenario) %>
 
-            <h4>Scenario</h4>
-            <%- include(vuln_scenario) %>
-
-            <h4>Overview</h4>
-            <%- include(vuln_description) %>
-
-            <h4>Reference</h4>
-            <%- include(vuln_reference) %>
+                <h4>Change Security Rating</h4>
+                <% include ../common/ratingChooser %>
+            
+                <h4>Overview</h4>
+                <%- include(vuln_description) %>
+            
+                <h4>Reference</h4>
+                <%- include(vuln_reference) %>
         </div>
     </div>
 

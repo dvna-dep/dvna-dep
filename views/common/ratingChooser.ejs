@@ -1,0 +1,27 @@
+<form>
+    <div class="form-check row">
+        <% for (var rating in ratings) { %>
+            <span class="col-sm-2">
+                <input class="form-check-input" type="radio" name="securityRating" id=<%= "rating" + rating %>  value= <%=rating%> >
+                <label class="form-check-label" for=<%= "rating" + rating %>>
+                    <%= "Level " + rating %>
+                </label>
+            </span>
+        <% } %>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+<script>
+    // get security level from query params
+    document.addEventListener('DOMContentLoaded', (event) => {
+        var params = new URLSearchParams(window.location.search);
+        var securityRating = 0
+        if (params.get("securityRating") && params.get("securityRating")==1){
+            securityRating = 1;
+        };
+        checked_input = document.getElementById("rating" + securityRating);
+        checked_input.setAttribute("checked", '')
+    });
+</script>

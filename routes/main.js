@@ -1,5 +1,6 @@
 var router = require('express').Router()
 var vulnDict = require('../config/vulns')
+var ratingsDict = require('../config/ratings')
 var authHandler = require('../core/authHandler')
 
 module.exports = function (passport) {
@@ -12,13 +13,16 @@ module.exports = function (passport) {
 	})
 
 	router.get('/learn/vulnerability/:vuln', authHandler.isAuthenticated, function (req, res) {
+		var query_rating = req.query.securityRating ? req.query.securityRating : 0;
 		res.render('vulnerabilities/layout', {
 			vuln: req.params.vuln,
 			vuln_title: vulnDict[req.params.vuln],
 			vuln_scenario: req.params.vuln + '/scenario',
 			vuln_description: req.params.vuln + '/description',
 			vuln_reference: req.params.vuln + '/reference',
-			vulnerabilities:vulnDict
+			vulnerabilities:vulnDict,
+			ratings: ratingsDict[req.params.vuln],
+			securityRating: query_rating
 		}, function (err, html) {
 			if (err) {
 				console.log(err)
