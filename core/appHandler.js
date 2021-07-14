@@ -1,6 +1,7 @@
 var db = require('../models')
 var bCrypt = require('bcrypt')
 const exec = require('child_process').exec;
+const execFile = require('child_process').execFile
 var mathjs = require('mathjs')
 var libxmljs = require("libxmljs");
 var serialize = require("node-serialize")

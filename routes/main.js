@@ -47,7 +47,8 @@ module.exports = function (passport) {
 	})
 
 	router.get('/forgotpw', function (req, res) {
-		res.render('forgotpw')
+		var query_rating = req.query.securityRating ? req.query.securityRating : 0;
+		res.render('forgotpw', {qs: query_rating});
 	})
 
 	router.get('/resetpw', authHandler.resetPw)
@@ -66,7 +67,10 @@ module.exports = function (passport) {
 
 	router.post('/forgotpw', authHandler.forgotPw)
 
-	router.post('/resetpw', authHandler.resetPwSubmit)
+	router.post('/resetpw', authHandler.resetPwSubmit, function(req, res){
+		console.log(req)
+		res.render('resetpw', {login: req.login, token: req.token, level: req.level})
+	})
 
 	return router
 }
