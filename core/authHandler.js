@@ -111,7 +111,7 @@ module.exports.resetPw = function (req, res) {
 				}
 			})
 		} else {
-			req.flash('danger', "Non Existant login username")
+			req.flash('danger', "Invalid login username")
 			res.redirect('/forgotpw')
 		}	
 	}
