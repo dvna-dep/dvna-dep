@@ -1,132 +1,52 @@
-# Damn Vulnerable NodeJS Application (DVNA) 
+# Damn Vulnerable Node Application - DEP
+## How to harden a ‘Damn Vulnerable Node Application’ against common vulnerabilities 
 
-![dvna-logo](docs/resources/dvna.png)
 
-Damn Vulnerable NodeJS Application (DVNA) is a simple NodeJS application to demonstrate [**OWASP Top 10 Vulnerabilities**](https://www.owasp.org/index.php/Top_10-2017_Top_10) and guide on fixing and avoiding these vulnerabilities. The [fixes](https://github.com/appsecco/dvna/tree/fixes) branch will contain fixes for the vulnerabilities. Fixes for vunerabilities OWASP Top 10 2017 vulnerabilities at [fixes-2017](https://github.com/appsecco/dvna/tree/fixes-2017) branch.
+---
+# Project Info
 
-The application is powered by commonly used libraries such as [express](https://www.npmjs.com/package/express), [passport](https://www.npmjs.com/package/passport), [sequelize](https://www.npmjs.com/package/sequelize), etc.
+- Name:  			DVNA-DEP Website Security Project
+- Requirements: 		https://bit.ly/2SE4dib
+- Project Partner: William Pfeil
+- Course: CS467 Summer 2021Department: Oregon State University EECS 
+- Team and Contact Information:
+Patrick Byrne			byrnepat@oregonstate.edu
+Seok Choi (aka Dan)		choiseok@oregonstate.edu
+Elaine Laguerta		laguerte@oregonstea.edu
 
-## Developer Security Guide book
+# Explanation of Our Project Name
 
-The application comes with a **developer friendly comprehensive guidebook** which can be used to learn, avoid and fix the vulnerabilities. The guide available at https://appsecco.com/books/dvna-developers-security-guide/ covers the following
+The DVNA of the DVNA-DEP stands for Damn Vulnerable NodeJS Application, which is Appsecco’s NodeJS variation of the famous PHP web app Damn Vulnerable Web App (DVWA).  The DEP of the DVNA-DEP stands for “Dan”, “Elaine”, and “Patrick”, who are the three members of this project’s development group.  This project (DVNA-DEP) modifies code from Appsecco’s DVNA to expand and create our own version of a vulnerable NodeJS web app, which can act as a sandbox for cyber attacks.  Ultimately, a user will be presented with multiple versions/options of this web app, which vary in its vulnerability (from very vulnerable to heavily fortified against cyber attacks).
 
-1. Instructions for setting up DVNA
-2. Instructions on exploiting the vulnerabilities
-3. Vulnerable code snippets and instructions on fixing vulnerabilities
-4. Recommendations for avoid such vulnerabilities
-5. References for learning more
+# Background of Our Project
 
-The blog post for this release is at https://blog.appsecco.com/damn-vulnerable-nodejs-application-dvna-by-appsecco-7d782d36dc1e
+The Internet developed organically, beginning with a small network between colleagues. Its functionality and design ethos depended on trusted users, a default attitude which arguably persists today, despite our best efforts. However, the Internet has grown past the initial set of trusted users, to encompass over half of the global population as of 2019 [1]. Naturally this population includes bad actors. These actors are incredibly diverse - of different demographics, means, and driven by various motivations - but all succeed in violating the mutual trust that supports the Internet by exploiting a common set of vulnerabilities.
 
-## Quick start
+This common set of vulnerabilities was codified by the OWASP foundation, first in 2013 and then revised in 2017, as a list of 10 vulnerabilities that  “represents a broad consensus about the most critical security risks to web applications” [2].  These vulnerabilities were found to occur across platforms and development stacks, in 114,000 applications from various organizations in 2017. The data call for 2021 has already received more than double the data points as compared to the 2017 call, suggesting that vulnerabilities continue to be exploitable. [3]
 
-Try DVNA using a single command with Docker. This setup uses an SQLite database instead of MySQL.
+It is not possible to develop a new, more secure Internet to replace the current Internet. Even as web development stacks and tools evolve, and are even phased out and replaced by the “latest and greatest” libraries, every step forward must consider and reconsider the vulnerabilities posed by a default attitude of trust.
 
-```bash
-docker run --name dvna -p 9090:9090 -d appsecco/dvna:sqlite
-```
+The purpose of this project is to explore the OWASP Top 10 vulnerabilities within the context of a node.js application. We will demonstrate how to harden the application against the vulnerabilities, with the hope that it can provide a model for hardening node.js and other applications. 
 
-Access the application at http://127.0.0.1:9090/
+# Program Description
 
-## Getting Started
+The user will be presented with a link to a private Github repository.  This repo will contain all necessary code and how-to documentation for a web application. The documentation will include both how to run the application and how to use it.
 
-DVNA can be deployed in three ways
+The user should be able to run repo’s code on a local machine, a server, a virtual machine, or docker. While the user has diverse options, documentation will point the user to run the code on docker.
 
-1. For Developers, using docker-compose with auto-reload on code updates
-2. For Security Testers, using the Official image from Docker Hub
-3. For Advanced Users, using a fully manual setup
+When the code is run, the user will see a simple web app.  However, the purpose of this web app is as a sandbox for cyber attacks from another machine (e.g., kali linux running on a virtual machine).  The app will have user accounts and authentication. It will also have user input, a database, and whatever else is needed to offer a target for attacks.
 
-Detailed instructions on setup and requirements are given in the Guide Gitbook
+The final demonstration of this project will have different versions of the web app that are vulnerable / not vulnerable to the various attacks and/or options to turn on or off vulnerabilities.  The user should be able to test attacks against our web app at varying difficulty levels. 
 
-### Development Setup
+# References
+1. Wikipedia contributors. List of countries by number of Internet users. Wikipedia, The Free Encyclopedia. June 30, 2021. Available at: https://en.wikipedia.org/w/index.php?title=List_of_countries_by_number_of_Internet_users&oldid=1031179313. Accessed June 30, 2021.
 
-Clone this repository
-```bash
-git clone https://github.com/appsecco/dvna; cd dvna
-```
+2. OWASP. OWASP Top Ten. 2017. Available at: https://owasp.org/www-project-top-ten/. Accessed June 30, 2021.
 
-Create a `vars.env` with the desired database configuration
-```
-MYSQL_USER=dvna
-MYSQL_DATABASE=dvna
-MYSQL_PASSWORD=passw0rd
-MYSQL_RANDOM_ROOT_PASSWORD=yes
-```
+3. OWASP. The Data. 2021. Available at: https://www.owasptopten.org/thedata. Accessed June 30, 2021.
 
-Start the application and database using docker-compose
-```bash
-docker-compose up
-```
+4. appsecco. Damn Vulnerable NodeJS Application, source code. Available at: https://github.com/appsecco/dvna. Accessed June 30, 2021. 
 
-Access the application at http://127.0.0.1:9090/ 
+5. elaguerta. DVNA-DEP, source code. Available at: https://github.com/elaguerta/dvna-dep. 
 
-The application will automatically reload on code changes, so feel free to patch and play around with the application.
-
-### Using Official Docker Image
-
-Create a file named `vars.env` with the following configuration
-```
-MYSQL_USER=dvna
-MYSQL_DATABASE=dvna
-MYSQL_PASSWORD=passw0rd
-MYSQL_RANDOM_ROOT_PASSWORD=yes
-MYSQL_HOST=mysql-db
-MYSQL_PORT=3306
-```
-
-Start a MySQL container
-```bash
-docker run --name dvna-mysql --env-file vars.env -d mysql:5.7
-```
-
-Start the application using the official image
-```bash
-docker run --name dvna-app --env-file vars.env --link dvna-mysql:mysql-db -p 9090:9090 appsecco/dvna
-```
-
-Access the application at http://127.0.0.1:9090/ and start testing!
-
-### Manual Setup
-
-Clone the repository
-```bash
-git clone https://github.com/appsecco/dvna; cd dvna
-```
-
-Configure the environment variables with your database information
-```bash
-export MYSQL_USER=dvna
-export MYSQL_DATABASE=dvna
-export MYSQL_PASSWORD=passw0rd
-export MYSQL_HOST=127.0.0.1
-export MYSQL_PORT=3306
-```
-
-Install Dependencies
-```bash
-npm install
-```
-
-Start the application
-```bash
-npm start
-```
-
-Access the application at http://localhost:9090
-
-## TODO
-
-- [ ] Link commits to fixes in documentation
-- [x] Add new vulnerabilities from OWASP Top 10 2017
-- [x] Improve application features, documentation
-
-## Contributing
-
-In case of bugs in the application, please create an issue on github. Pull requests are highly welcome!
-
-## Thanks
-[Abhisek Datta - abhisek](https://github.com/abhisek) for application architecture and front-end code
-
-## License
-
-MIT
+6. appseco. Damn Vulnerable NodeJS Application, handbook. Available at:  https://appsecco.com/books/dvna-developers-security-guide. Accessed June 30, 2021.
