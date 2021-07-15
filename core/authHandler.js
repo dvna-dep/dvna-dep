@@ -43,8 +43,8 @@ module.exports.forgotPw = function (req, res) {
 					res.redirect('/login')
 				}
 				else if(req.body.security_level == '1'){
-					db.Passreset.findAll({limit:1,where:{'userId':user.id},order:[['createdAt','DESC']]}).then(passreset => {
-						passreset = passreset[0]
+					db.Passreset.findAll({limit:1,where:{'userId':user.id},order:[['createdAt','DESC']]}).then(record => {
+						passreset = record[0]
 						if(!passreset || passreset.used==true || (Date.now() - passreset.requestedAt)>coolDownTime){
 							pr = new db.Passreset()
 							var token = cryptoRandomString(30)
