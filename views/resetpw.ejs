@@ -10,7 +10,7 @@
     <div class='row'>
         <div class='col-md-6 col-md-offset-3'>
             <div class='page-header'>
-                <h2>Reset Password</h2>
+                <h2>Reset Password - Level <%= level %></h2>
             </div>
 
             <% if (messages.success) { %>
@@ -45,6 +45,7 @@
 
                         <input type="hidden" name="login" value="<%=login%>" id="resetPasswordExecute_login" />
                         <input type="hidden" name="token" value="<%=token%>" id="resetPasswordExecute_key" />
+                        <input type="hidden" name="level" value="<%=level%>" id="level_key" />
 
                         <input type="submit" value="Submit" id="resetPasswordExecute_0" class="btn btn-primary" />
 
