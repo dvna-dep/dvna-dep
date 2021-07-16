@@ -38,7 +38,11 @@ module.exports = function (passport) {
 	})
 
 	router.get('/register', authHandler.isNotAuthenticated, function (req, res) {
-		res.render('register')
+		var query_rating = req.query.securityRating ? req.query.securityRating : 0;	
+		res.render('register', {
+			ratings: ratingsDict['register'],
+			securityRating: query_rating
+		})
 	})
 
 	router.get('/logout', function (req, res) {
@@ -59,12 +63,14 @@ module.exports = function (passport) {
 		failureFlash: true
 	}))
 
-	router.post('/register', passport.authenticate('signup', {
-		successRedirect: '/learn',
-		failureRedirect: '/register',
-		failureFlash: true
-	}))
-
+	router.post('/register', function(req, res, next){
+		passport.authenticate('signup', {
+			successRedirect: '/learn',
+			failureRedirect: '/register?securityRating=' + req.body.securityRating,
+			failureFlash: true
+		})(req, res, next);
+	})
+	
 	router.post('/forgotpw', authHandler.forgotPw)
 
 	router.post('/resetpw', authHandler.resetPwSubmit, function(req, res){
