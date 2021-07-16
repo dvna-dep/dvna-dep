@@ -62,7 +62,7 @@ module.exports = function (passport) {
             findOrCreateUser = function () {
                 db.User.findOne({
                     where: {
-                        'email': username
+                        'email': req.body.email
                     }
                 }).then(function (user) {
                     if (user) {
