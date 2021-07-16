@@ -52,7 +52,10 @@ module.exports = function (passport) {
 
 	router.get('/forgotpw', function (req, res) {
 		var query_rating = req.query.securityRating ? req.query.securityRating : 0;
-		res.render('forgotpw', {qs: query_rating});
+		res.render('forgotpw', {
+			ratings: ratingsDict['forgotpw'],
+			securityRating: query_rating
+		});
 	})
 
 	router.get('/resetpw', authHandler.resetPw)
