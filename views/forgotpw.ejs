@@ -10,7 +10,7 @@
 	    <div class='row'>
 	        <div class='col-md-6 col-md-offset-3'>
 	            <div class='page-header'>
-	                <h2>Reset Password - Level <%= qs %></h2>
+	                <h2>Reset Password - Level <%= securityRating %></h2>
 	            </div>
 
 				<% if (messages.success) { %>
@@ -33,7 +33,7 @@
 					            <div class="  controls">
 
 					                <input type="text" name="login" value="" id="resetPasswordStart_login" class="form-control" placeholder="Enter login name" />
-									<input type="hidden" id="security_level" name="security_level" value= <%= qs %>>
+									<input type="hidden" id="security_level" name="security_level" value= <%= securityRating %>>
 								</div>
 					        </div>
 
@@ -53,6 +53,10 @@
 	                <br/>
 	                <a href='/register'>Register and create new account</a>
 	            </div>
+				<h4>The Current Security Rating is <%= securityRating %></h4>
+				<h4>Change Security Rating</h4>
+				<% include common/ratingChooser %>
+
 	        </div>
 	    </div>
 

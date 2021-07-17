@@ -15,7 +15,7 @@
                 <% if (messages.success) { %>
                     <div class="alert alert-success"><%=messages.success%></div>
                 <% } else if (messages.danger) { %>
-                    <div class="alert alert-danger"><%= messages.danger %></div>
+                    <div class="alert alert-danger"><%- messages.danger %></div>
                 <% } else if (messages.warning) {%> 
                     <div class="alert alert-warning"><%= messages.warning %></div>
                 <% } else if (messages.info) {%> 
@@ -39,8 +39,7 @@
                                 <label class="  control-label" for="register_login">Login </label>
                                 <div class="  controls">
 
-                                    <input type="text" name="username" value="" id="register_login" class="form-control" placeholder="Enter username" />
-                                </div>
+                                    <input type="text" name="username" value="" id="register_login" class="form-control" placeholder="Enter username"<%if (securityRating > 0) { %>required<% } %>/></div>
                             </div>
 
 
@@ -57,7 +56,7 @@
                                 <label class="  control-label" for="register_password">Password </label>
                                 <div class="  controls">
 
-                                    <input type="password" name="password" id="register_password" class="form-control" placeholder="Enter password" />
+                                    <input type="password" name="password" id="register_password" class="form-control" placeholder="Enter password"<%if (securityRating > 0) { %>required<% } %>/>
                                 </div>
                             </div>
 
@@ -69,6 +68,7 @@
                                 </div>
                             </div>
 
+                            <input type="hidden" id="securityRating" name="securityRating" value= <%= securityRating %>>
 
                             <input type="submit" value="Submit" id="register_0" class="btn btn-primary" />
 
@@ -91,6 +91,9 @@
             </div>
          </div>
 
+         <h4>The Current Security Rating is <%= securityRating %></h4>
+         <h4>Change Security Rating</h4>
+         <% include common/ratingChooser %>
 
     </div></div></div>
     <% include common/footer %>

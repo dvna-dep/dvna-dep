@@ -14,7 +14,10 @@ module.exports = {
 	},
 	vPassword: function (val){
 		if (val)
-			return val.length>=8
+			var value = validator.isStrongPassword(val, {minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1})
+			console.log(value)
+			return value
+			// return val.length>=8
 	},
 	vIP: function (val){
 		if(val)

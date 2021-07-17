@@ -10,5 +10,7 @@ module.exports = {
 	'a9_vuln_component': [0,1],
 	'a10_logging': [0,1],
 	'ax_csrf': [0,1],
-	'ax_redirect': [0,1]
+	'ax_redirect': [0,1],
+	'register': [0, 1],
+	'forgotpw': [0, 1]
 }
