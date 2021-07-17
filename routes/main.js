@@ -77,7 +77,7 @@ module.exports = function (passport) {
 	router.post('/forgotpw', authHandler.forgotPw)
 
 	router.post('/resetpw', authHandler.resetPwSubmit, function(req, res){
-		res.render('resetpw', {login: req.login, token: req.token, level: req.level})
+		res.render('resetpw', {login: req.login, token: req.token, securityRating: req.securityRating})
 	})
 
 	return router
