@@ -46,5 +46,13 @@ module.exports = {
 	vUrl: function (val){
 		if(val)
 			return validator.isURL(val + '')
-	}
+	}, 
+	vBlacklist: function (val){
+		if(val)
+			return validator.blacklist(validator.trim(val), '\'#&|;-'); 
+	},
+	vWhitelist: function (val){
+		if(val)
+			return validator.isWhitelisted(val + '', 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_') // only allow letters, numbers, and underscores (no dashes)
+	},
 }
