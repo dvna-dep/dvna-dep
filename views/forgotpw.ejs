@@ -10,7 +10,7 @@
 	    <div class='row'>
 	        <div class='col-md-6 col-md-offset-3'>
 	            <div class='page-header'>
-	                <h2>Reset Password - Level <%= securityRating %></h2>
+	                <h2>Reset Password - Security Rating <%= securityRating %></h2>
 	            </div>
 
 				<% if (messages.success) { %>
@@ -33,7 +33,7 @@
 					            <div class="  controls">
 
 					                <input type="text" name="login" value="" id="resetPasswordStart_login" class="form-control" placeholder="Enter login name" />
-									<input type="hidden" id="security_level" name="security_level" value= <%= securityRating %>>
+									<input type="hidden" id="securityRating" name="securityRating" value= <%= securityRating %>>
 								</div>
 					        </div>
 

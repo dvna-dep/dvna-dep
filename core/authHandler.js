@@ -36,13 +36,13 @@ module.exports.forgotPw = function (req, res) {
 			}
 		}).then(user => {
 			if (user) {			
-				if(req.body.security_level == '0'){
+				if(req.body.securityRating == '0'){
 					// Send reset link via email happens here
 					var md5token = md5(req.body.login);
-					req.flash('info', 'Email has been sent < http://127.0.0.1:9090/resetpw?login='+req.body.login+'&token=' + md5token+'&level='+ req.body.security_level + ' >')
+					req.flash('info', 'Email has been sent < http://127.0.0.1:9090/resetpw?login='+req.body.login+'&token=' + md5token+'&securityRating='+ req.body.securityRating + ' >')
 					res.redirect('/login')
 				}
-				else if(req.body.security_level == '1'){
+				else if(req.body.securityRating == '1'){
 					db.Passreset.findAll({limit:1,where:{'userId':user.id},order:[['createdAt','DESC']]}).then(record => {
 						passreset = record[0]
 						if(!passreset || passreset.used==true || (Date.now() - passreset.requestedAt)>coolDownTime){
@@ -54,7 +54,7 @@ module.exports.forgotPw = function (req, res) {
 							pr.tokenHash = sha512(token)
 							pr.save()
 							// SEND_EMAIL (token) at this step
-							req.flash('info', 'If account exists, you will get an email on the registered email' + '< http://127.0.0.1:9090/resetpw?login='+req.body.login+'&token=' + token+'&level='+ req.body.security_level+ ' >' )
+							req.flash('info', 'If account exists, you will get an email on the registered email' + '< http://127.0.0.1:9090/resetpw?login='+req.body.login+'&token=' + token+'&securityRating='+ req.body.securityRating+ ' >' )
 							res.redirect('/login')
 						}else{
 							// Cooldown time to prevent DoS
@@ -64,21 +64,21 @@ module.exports.forgotPw = function (req, res) {
 					})
 				}
 			} else {
-				if(req.body.security_level == '0'){
+				if(req.body.securityRating == '0'){
 					req.flash('danger', "Invalid login username")
 					res.redirect('/forgotpw')
 				}
-				else if(req.body.security_level == '1'){
+				else if(req.body.securityRating == '1'){
 					req.flash('info', 'If account exists, you will get an email on the registered email <note: invalid>')
 					res.redirect('/login')
 				}
 			}
 		})
 	} else {
-		if(req.body.security_level == '0'){
+		if(req.body.securityRating == '0'){
 			req.flash('danger', "Invalid login username")
 		}
-		else if(req.body.security_level == '1'){
+		else if(req.body.securityRating == '1'){
 			req.flash('danger', "Error, Username contains special charecters")
 		}
 		res.redirect('/forgotpw')
@@ -86,7 +86,7 @@ module.exports.forgotPw = function (req, res) {
 }
 
 module.exports.resetPw = function (req, res) {
-	if(req.query.level == '0'){
+	if(req.query.securityRating == '0'){
 		if (req.query.login) {
 			db.User.find({
 				where: {
@@ -98,7 +98,7 @@ module.exports.resetPw = function (req, res) {
 						res.render('resetpw', {
 							login: req.query.login,
 							token: req.query.token,
-							level: req.query.level
+							securityRating: req.query.securityRating
 						})
 					} else {
 						req.flash('danger', "Invalid reset token")
@@ -115,7 +115,7 @@ module.exports.resetPw = function (req, res) {
 			res.redirect('/forgotpw')
 		}	
 	}
-	else if(req.query.level == '1'){
+	else if(req.query.securityRating == '1'){
 		if (vh.vCode(req.query.login)&&vh.vCode(req.query.token)) {
 			db.User.find({
 				where: {
@@ -128,7 +128,7 @@ module.exports.resetPw = function (req, res) {
 							res.render('resetpw', {
 								login: req.query.login,
 								token: req.query.token,
-								level: req.query.level
+								securityRating: req.query.securityRating
 							})							
 						}else if(resetpass){
 							req.flash('warning', "Link Expired")
@@ -151,7 +151,7 @@ module.exports.resetPw = function (req, res) {
 }
 
 module.exports.resetPwSubmit = function (req, res) {
-	if(req.body.level == '0'){
+	if(req.body.securityRating == '0'){
 		if (req.body.password && req.body.cpassword && req.body.login && req.body.token) {
 			if (req.body.password == req.body.cpassword) {
 				db.User.find({
@@ -180,7 +180,7 @@ module.exports.resetPwSubmit = function (req, res) {
 				res.render('resetpw', {
 					login: req.body.login,
 					token: req.body.token,
-					level: req.body.level
+					securityRating: req.body.securityRating
 				})
 			}
 		} else {
@@ -188,7 +188,7 @@ module.exports.resetPwSubmit = function (req, res) {
 			res.redirect('/forgotpw')
 		}
 	}
-	else if(req.body.level == '1'){
+	else if(req.body.securityRating == '1'){
 		if (vh.vPassword(req.body.password) && req.body.cpassword && vh.vCode(req.body.login) && vh.vString(req.body.token)) {
 			if (req.body.password == req.body.cpassword) {
 				db.User.find({
@@ -223,7 +223,7 @@ module.exports.resetPwSubmit = function (req, res) {
 				res.render('resetpw', {
 					login: req.body.login,
 					token: req.body.token,
-					level: req.body.level
+					securityRating: req.body.securityRating
 				})
 			}
 		} else {
@@ -231,7 +231,7 @@ module.exports.resetPwSubmit = function (req, res) {
 			res.render('resetpw', {
 				login: req.body.login,
 				token: req.body.token,
-				level: req.body.level
+				securityRating: req.body.securityRating
 			})
 		}
 	}
