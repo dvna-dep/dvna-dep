@@ -1,47 +1,116 @@
 var db = require('../models')
 var bCrypt = require('bcrypt')
 const exec = require('child_process').exec;
+const execFile = require('child_process').execFile;
 var mathjs = require('mathjs')
 var libxmljs = require("libxmljs");
 var serialize = require("node-serialize")
+var vh = require('./validationHandler');
+
 const Op = db.Sequelize.Op
 
 module.exports.userSearch = function (req, res) {
-	var query = "SELECT name,id FROM Users WHERE login='" + req.body.login + "'";
-	db.sequelize.query(query, {
-		model: db.User
-	}).then(user => {
-		if (user.length) {
-			var output = {
-				user: {
-					name: user[0].name,
-					id: user[0].id
+    
+	if(req.body.securityRating == '0') {
+		var query = "SELECT name,id FROM Users WHERE login='" + req.body.login + "'";
+		db.sequelize.query(query, {
+			model: db.User
+		}).then(user => {
+			if (user.length) {
+				var output = {
+					user: {
+						name: user[0].name,
+						id: user[0].id
+					}
 				}
+				res.render('app/usersearch', {
+					securityRating: req.body.securityRating,
+					output: output
+				})
+			} else {
+				req.flash('warning', 'User not found')
+				res.render('app/usersearch', {
+					securityRating: req.body.securityRating,
+					output: null
+				})
 			}
+		}).catch(err => {
+			req.flash('danger', 'Internal Error')
 			res.render('app/usersearch', {
-				output: output
-			})
-		} else {
-			req.flash('warning', 'User not found')
-			res.render('app/usersearch', {
+				securityRating: req.body.securityRating,
 				output: null
 			})
-		}
-	}).catch(err => {
-		req.flash('danger', 'Internal Error')
-		res.render('app/usersearch', {
-			output: null
 		})
-	})
+	} else if(req.body.securityRating == '1') {
+		// check input for allowed characters
+		if(vh.vWhitelist(req.body.login)) {
+			db.User.find({where:{'login':req.body.login}
+			}).then(user => {
+				if (user) {
+					var output = {
+						user: {
+							name: user.name,
+							id: user.id
+						}
+					}
+					res.render('app/usersearch', {
+						securityRating: req.body.securityRating,
+						output: output
+					})
+				} else {
+					req.flash('warning', 'User not found')
+					res.render('app/usersearch', {
+						securityRating: req.body.securityRating,
+						output: null
+					})
+				}
+			}).catch(err => {
+				req.flash('danger', 'Internal Error')
+				res.render('app/usersearch', {
+					securityRating: req.body.securityRating,
+					output: null
+				})
+			})
+		} else {
+			req.flash('danger', 'Invalid login ');
+			req.flash('danger', 'Input Validation Failed');
+			res.render('app/usersearch', {
+				securityRating: req.body.securityRating,
+				output:null
+			})
+		}
+	}
+	
 }
 
 module.exports.ping = function (req, res) {
-	exec('ping -c 2 ' + req.body.address, function (err, stdout, stderr) {
-		output = stdout + stderr
-		res.render('app/ping', {
-			output: output
+	if(req.body.securityRating == '0') {
+		exec('ping -c 2 ' + req.body.address, function (err, stdout, stderr) {
+			output = stdout + stderr
+			res.render('app/ping', {
+				securityRating: req.body.securityRating,
+				output: output
+			})
 		})
-	})
+	} else if(req.body.securityRating == '1') { 
+		// check if input is a valid IP address or URL
+		if(vh.vIP(req.body.address) || vh.vUrl(req.body.address)) {
+			execFile('ping', ['-c', '2', req.body.address], function(err, stdout, stderr) {
+				output = stdout + stderr
+				res.render('app/ping', {
+					securityRating: req.body.securityRating,
+					output:output
+				})
+			})
+		} else {
+			res.render('app/ping', {
+				securityRating: req.body.securityRating,
+				output: "Input Validation Failed"
+			})
+		}
+	
+
+	}
 }
 
 module.exports.listProducts = function (req, res) {

@@ -9,13 +9,15 @@ module.exports = function () {
 
     router.get('/usersearch', authHandler.isAuthenticated, function (req, res) {
         res.render('app/usersearch', {
-            output: null
+            output: null,
+            securityRating: req.query.securityRating
         })
     })
 
     router.get('/ping', authHandler.isAuthenticated, function (req, res) {
         res.render('app/ping', {
-            output: null
+            output: null,
+            securityRating: req.query.securityRating
         })
     })
 
