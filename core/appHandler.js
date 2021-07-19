@@ -8,6 +8,7 @@ var serialize = require("node-serialize")
 var vh = require('./validationHandler');
 
 const Op = db.Sequelize.Op
+var ratingState = require('../config/ratingState')
 
 module.exports.userSearch = function (req, res) {
     
@@ -293,7 +294,8 @@ function listUsersAPIRating1(res) {
 }
 
 module.exports.listUsersAPI = function (req, res) {
-	var securityRating = req.params.securityRating ? req.params.securityRating : 0;
+	var vulnKey = 'a3_sensitive_data';
+	var securityRating = ratingState[vulnKey];
 	if (securityRating == 0 ){
 		listUsersAPIRating0(res);
 	} else if (securityRating == 1) {

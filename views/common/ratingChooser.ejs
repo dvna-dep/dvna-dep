@@ -17,11 +17,11 @@
     // get security level from query params
     document.addEventListener('DOMContentLoaded', (event) => {
         var params = new URLSearchParams(window.location.search);
-        var securityRating = 0
+        var securityRating = 0;
         if (params.get("securityRating") && params.get("securityRating")==1){
             securityRating = 1;
         };
         checked_input = document.getElementById("rating" + securityRating);
-        checked_input.setAttribute("checked", '')
+        checked_input.setAttribute("checked", '');
     });
 </script>
