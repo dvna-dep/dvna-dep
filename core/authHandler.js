@@ -6,6 +6,13 @@ var cryptoRandomString = require('crypto-random-string')
 var s512 = require('hash.js/lib/hash/sha/512')
 var coolDownTime = 5*60*1000 // 5 mins
 
+const pwLength = "- Must contain at least 8 characters<br>"
+const pwLower = "- Must contain at least 1 lowercase letter<br>"
+const pwUpper = "- Must contain at least 1 uppercase letter<br>"
+const pwNumber = "- Must contain at least 1 number<br>"
+const pwSpec = "- Must contain at least 1 special character"
+const badPWmsg = "Bad Password:<br>" + pwLength + pwLower + pwUpper + pwNumber + pwSpec
+
 function sha512 (val) {
 	return s512().update(val).digest('hex')
 }
@@ -227,7 +234,7 @@ module.exports.resetPwSubmit = function (req, res) {
 				})
 			}
 		} else {
-			req.flash('danger', "Input validation failed")
+			req.flash('danger', badPWmsg)
 			res.render('resetpw', {
 				login: req.body.login,
 				token: req.body.token,
