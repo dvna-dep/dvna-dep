@@ -47,9 +47,6 @@ module.exports = {
 		if(val)
 			return validator.isURL(val + '')
 	}, 
-	vBlacklist: function (val){
-		if(val)
-			return validator.blacklist(validator.trim(val), '\'#&|;-'); 
 	},
 	vWhitelist: function (val){
 		if(val)
