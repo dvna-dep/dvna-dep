@@ -17,7 +17,8 @@
             <div class="alert alert-info"><%= messages.info %></div>
         <% } %>
 
-        <h2> Users </h2>
+        <h2> Users  <% if(securityRating == 1 || securityRating == 0){%>- Security Rating <%=securityRating%>                <%}%>
+        </h2>
         <table class='table' id='users-table'>
             <tr>
                 <th >User ID</th>
@@ -63,7 +64,7 @@
                    }
                 }
             };
-            xmlhttp.open("GET", "/app/admin/usersapi", true);
+            xmlhttp.open("GET", "<%='/app/admin/usersapi?securityRating=' + securityRating %>", true);
             xmlhttp.send();
         }
         loadUsers();
