@@ -37,14 +37,17 @@ module.exports = function () {
 
     router.get('/admin', authHandler.isAuthenticated, function (req, res) {
         res.render('app/admin', {
-            admin: (req.user.role == 'admin')
+            admin: (req.user.role == 'admin'),
+            securityRating: req.query.securityRating
         })
     })
 
-    router.get('/admin/usersapi', authHandler.isAuthenticated, appHandler.listUsersAPI)
+    router.get('/admin/usersapi/', authHandler.isAuthenticated, authHandler.isAdmin, appHandler.listUsersAPI)
 
-    router.get('/admin/users', authHandler.isAuthenticated, function(req, res){
-        res.render('app/adminusers')
+    router.get('/admin/users/', authHandler.isAuthenticated, authHandler.isAdmin,function(req, res){
+        res.render('app/adminusers', {
+            securityRating: req.query.securityRating
+        })
     })
 
     router.get('/redirect', appHandler.redirect)
