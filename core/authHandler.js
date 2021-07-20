@@ -23,16 +23,21 @@ var createHash = function (password) {
 
 module.exports.isAdmin = function (req, res, next){
 	if(req.query.securityRating == 1) {
-		if(req.user.role=='admin')
-		{
-			next()
-		} else
-			res.status(401).send('Unauthorized')
+		authenticateIsAdmin(req, res, next)
 	}
 	else{
 		next()
 	}
 }
+
+function authenticateIsAdmin(req, res, next){
+	if(req.user.role=='admin')
+	{
+		next()
+	} else
+		res.status(401).send('Unauthorized')
+} 
+
 
 module.exports.isAuthenticated = function (req, res, next) {
 	if (req.isAuthenticated()) {
