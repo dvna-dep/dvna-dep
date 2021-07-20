@@ -10,19 +10,36 @@
         <div class='row'>
             <div class='col-md-12'>
                 <div class='page-header'>
-                    <h2>Admin Dashboard</h2>
-	                </div>
-                <div id='admin-body' class='page-body'>
-                    <a href='/app/admin/users'>List Users</a><br>
+                    <h2>Admin Dashboard - Security Rating <%= securityRating%></h2>                  
                 </div>
-                <div id='user-body' class='page-body'>
-                    You are not an Admin<br>
-                </div>
+                <% if(securityRating == 0){%>
+                    <div id='admin-body' class='page-body'>
+                        <!-- SADLY, IF YOU SEE BELOW END LINKS, YOU DISCOVERED THE VULNERABILITY AT SECURITY RATING 0 -->
+                        <a href=<%='/app/admin/users?securityRating=' + securityRating %>>List Users Security Rating 0</a><br>                 
+                    </div>
+                    <div id='user-body' class='page-body'>
+                        You are not an Admin ... but you should be able to see something hidden using an inspector<br>
+                   </div>  
+                <%}%>           
+                <% if(securityRating == 1){%>
+                    <% if(admin) { %>
+                        <div id='admin-body' class='page-body'>
+                            <a href=<%='/app/admin/users?securityRating=' + securityRating %>>List Users</a><br>                 
+                        </div>
+                        <% } else { %>
+                        <div id='user-body' class='page-body'>
+                            You are not an Admin ... and you'll see nothing here<br>
+                        </div>
+                        <% } %>
+                <%}%>
+
             </div>
          </div>
     </div></div></div>
     <% include ../common/footer %>
+
 </body>
+<% if(securityRating == 0){%>
     <script>
         var isAdmin = <%=admin%>;
         if(!isAdmin){
@@ -33,4 +50,6 @@
             div.style.display = "none";            
         }
     </script>
+
+<%}%>   
 </html>
