@@ -1,4 +1,5 @@
 var router = require('express').Router()
+const ratingState = require('../config/ratingState')
 var appHandler = require('../core/appHandler')
 var authHandler = require('../core/authHandler')
 
@@ -36,17 +37,47 @@ module.exports = function () {
     })
 
     router.get('/admin', authHandler.isAuthenticated, function (req, res) {
+        var globalRating = ratingState[req.query.vuln]
         res.render('app/admin', {
             admin: (req.user.role == 'admin'),
-            securityRating: req.query.securityRating
+            securityRating: globalRating,
+            vuln: req.query.vuln
         })
     })
 
     router.get('/admin/usersapi/', authHandler.isAuthenticated, authHandler.isAdmin, appHandler.listUsersAPI)
 
     router.get('/admin/users/', authHandler.isAuthenticated, authHandler.isAdmin,function(req, res){
+        vuln3 = 'a3_sensitive_data'
+        vuln5 = 'a5_broken_access_control'
+        var a3Rating = ratingState['a3_sensitive_data']
+        var a5Rating = ratingState['a5_broken_access_control']
         res.render('app/adminusers', {
-            securityRating: req.query.securityRating
+            a3Rating: a3Rating,
+            a5Rating: a5Rating,
+            admin: req.user.role,
+            vuln3: vuln3,
+            vuln5: vuln5
+        })
+    })
+
+    router.get('/admin/users/toggle', authHandler.isAuthenticated, function (req, res) {
+        if(ratingState[req.query.vuln] == 1)
+            ratingState[req.query.vuln] = 0
+        else
+            ratingState[req.query.vuln] = 1
+        res.redirect('/app/admin/users/')
+    })
+
+    router.get('/admin/toggle/a5', authHandler.isAuthenticated, function (req, res) {
+        if(ratingState['a5_broken_access_control'] == 1)
+            ratingState['a5_broken_access_control'] = 0
+        else
+            ratingState['a5_broken_access_control'] = 1
+        res.render('app/admin', {
+            admin: (req.user.dataValues.role == 'admin'),
+            securityRating: ratingState['a5_broken_access_control'],
+            vuln: 'a5_broken_access_control'
         })
     })
 
