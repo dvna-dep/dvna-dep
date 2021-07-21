@@ -15,7 +15,6 @@ module.exports = {
 	vPassword: function (val){
 		if (val)
 			var value = validator.isStrongPassword(val, {minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1})
-			console.log(value)
 			return value
 			// return val.length>=8
 	},
@@ -47,7 +46,7 @@ module.exports = {
 		if(val)
 			return validator.isURL(val + '')
 	}, 
-	},
+	
 	vWhitelist: function (val){
 		if(val)
 			return validator.isWhitelisted(val + '', 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_') // only allow letters, numbers, and underscores (no dashes)

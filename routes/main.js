@@ -16,6 +16,9 @@ module.exports = function (passport) {
 	router.get('/learn/vulnerability/:vuln', authHandler.isAuthenticated, function (req, res) {
 		var query_rating = req.query.securityRating ? req.query.securityRating : ratingState[req.params.vuln];
 		ratingState[req.params.vuln] = query_rating
+		if(req.params.vuln == 'a3_sensitive_data'){
+			ratingState['a5_broken_access_control'] = 0
+		}
 		res.render('vulnerabilities/layout', {
 			vuln: req.params.vuln,
 			vuln_title: vulnDict[req.params.vuln],

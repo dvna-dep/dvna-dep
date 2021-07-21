@@ -295,7 +295,7 @@ function listUsersAPIRating1(res) {
 
 module.exports.listUsersAPI = function (req, res) {
 	var vulnKey = 'a3_sensitive_data';
-	var securityRating = ratingState[vulnKey];
+	securityRating = ratingState[vulnKey]
 	if (securityRating == 0 ){
 		listUsersAPIRating0(res);
 	} else if (securityRating == 1) {
