@@ -17,8 +17,29 @@
             <div class="alert alert-info"><%= messages.info %></div>
         <% } %>
 
-        <h2> Users  <% if(securityRating == 1 || securityRating == 0){%>- Security Rating <%=securityRating%>                <%}%>
-        </h2>
+
+        <h3>THIS IS AN ADMIN ONLY PAGE<br>(YOU ARE
+            <% if(admin == 'admin'){%> AN ADMIN USER)<%}
+            else {%> NOT AN ADMIN USER ... so technically, you're not allowed here)<%}%>
+        </h3>
+        <br>
+
+        <h4>A3 Security Rating <%=a3Rating%> -
+            <% if(a3Rating == 0){%>Sensitive Information Exposed at admin API endpoint   <a href='/app/admin/users/toggle?vuln=<%=vuln3%>'>(Toggle A3 Rating to 1)</a><%}%>
+            <% if(a3Rating == 1){%>Sensitive Information Hidden at admin API endpoint  <a href='/app/admin/users/toggle?vuln=<%=vuln3%>'>(Toggle A3 Rating to 0)</a><%}%>
+        
+        </h4>
+        <h4>A5 Security Rating <%=a5Rating%> -
+            <% if(a5Rating == 0){%>Non-admins can access to admin API endpoint - <a href='/app/admin/users/toggle?vuln=<%=vuln5%>'>(Toggle A5 Rating to 1)</a><%}%>
+            <% if(a5Rating == 1){%>Non-Admins can NOT access admin API endpoint - <a href='/app/admin/users/toggle?vuln=<%=vuln5%>'>(Toggle A5 Rating to 0)</a><%}%>
+        </h4>
+        <br>
+        <h4>(1)  !!!WARNING!!!  If you are NOT an admin, and you toggle your A5 security rating to 1, you will lose access to this admin only page.</h4>
+        <h4>(2)  This admin page makes a call to the final admin API endpoint at: <a href= "http://localhost:9090/app/admin/usersapi">http://localhost:9090/app/admin/usersapi</a><br>(If both A3 and A5 Security Ratings are at 0, non-admin users will be able to access API and view sensitive information)</h4> 
+        <br>
+        <h2> Users</h2>
+
+        <br>
         <table class='table' id='users-table'>
             <tr>
                 <th >User ID</th>
@@ -64,7 +85,7 @@
                    }
                 }
             };
-            xmlhttp.open("GET", "<%='/app/admin/usersapi?securityRating=' + securityRating %>", true);
+            xmlhttp.open("GET", '/app/admin/usersapi', true);
             xmlhttp.send();
         }
         loadUsers();

@@ -10,12 +10,16 @@
         <div class='row'>
             <div class='col-md-12'>
                 <div class='page-header'>
-                    <h2>Admin Dashboard - Security Rating <%= securityRating%></h2>                  
+                    <h2>Admin Dashboard - Security Rating <%= securityRating%> </h2>
+                    <h4><a href='/app/admin/toggle/a5'>(Toggle A5 Security Rating to 
+                        <% if(securityRating == 0){%> 1<% } else { %> 0<% } %>)</a></h4> 
+                    <h5><% if(admin) { %>(note:  You Are an Admin)<% } %></h5>                 
                 </div>
                 <% if(securityRating == 0){%>
                     <div id='admin-body' class='page-body'>
-                        <!-- SADLY, IF YOU SEE BELOW END LINKS, YOU DISCOVERED THE VULNERABILITY AT SECURITY RATING 0 -->
-                        <a href=<%='/app/admin/users?securityRating=' + securityRating %>>List Users Security Rating 0</a><br>                 
+                        <!-- IF YOU CAN SEE THIS BELOW LINK, YOU DISCOVERED THE VULNERABILITY AT A5 SECURITY RATING 0 -->
+                        <!-- (BELOW LINK LEADS TO ADMIN ONLY PAGE, WHICH LEADS TO AN ADMIN API ENDPOINT) -->
+                        <a href=<%='http://localhost:9090/app/admin/users?vuln=' + vuln %>>Admin Only Link to See List of Users</a><br>                 
                     </div>
                     <div id='user-body' class='page-body'>
                         You are not an Admin ... but you should be able to see something hidden using an inspector<br>
@@ -24,7 +28,7 @@
                 <% if(securityRating == 1){%>
                     <% if(admin) { %>
                         <div id='admin-body' class='page-body'>
-                            <a href=<%='/app/admin/users?securityRating=' + securityRating %>>List Users</a><br>                 
+                            <a href=<%='http://localhost:9090/app/admin/users?vuln=' + vuln %>>Admin Only Link to See List of Users</a><br>                 
                         </div>
                         <% } else { %>
                         <div id='user-body' class='page-body'>
