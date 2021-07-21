@@ -5,6 +5,7 @@ var vh = require('./validationHandler')
 var cryptoRandomString = require('crypto-random-string')
 var s512 = require('hash.js/lib/hash/sha/512')
 var coolDownTime = 5*60*1000 // 5 mins
+const ratingState = require('../config/ratingState')
 
 const pwLength = "- Must contain at least 8 characters<br>"
 const pwLower = "- Must contain at least 1 lowercase letter<br>"
@@ -22,7 +23,8 @@ var createHash = function (password) {
 }
 
 module.exports.isAdmin = function (req, res, next){
-	if(req.query.securityRating == 1) {
+	var a5securityRating = ratingState['a5_broken_access_control']
+	if(a5securityRating == 1) {
 		authenticateIsAdmin(req, res, next)
 	}
 	else{
