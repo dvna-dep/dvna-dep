@@ -85,5 +85,10 @@ module.exports = function (passport) {
 		res.render('resetpw', {login: req.login, token: req.token, securityRating: req.securityRating})
 	})
 
+	router.post('/2fa/generate', authHandler.generateTwoFactorAuthenticationCode);
+
+	router.post('/2fa/turn-on', authHandler.turnOnTwoFactorAuthentication);
+
+
 	return router
 }
