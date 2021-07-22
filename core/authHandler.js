@@ -14,6 +14,66 @@ const pwNumber = "- Must contain at least 1 number<br>"
 const pwSpec = "- Must contain at least 1 special character"
 const badPWmsg = "Bad Password:<br>" + pwLength + pwLower + pwUpper + pwNumber + pwSpec
 
+// TFA code start
+//modeled after https://wanago.io/2019/07/22/nodejs-two-factor-authentication/
+var speakeasy = require('speakeasy');
+var QRCode = require ('qrcode');
+const { response } = require('express')
+
+var practiceSecret; 
+
+function getTwoFactorAuthenticationCode() {
+	const secretCode = speakeasy.generateSecret({
+		name: 'DVNA-DEP'
+	});
+	practiceSecret = secretCode.base32;
+	return {
+		otpauthUrl: secretCode.otpauth_url,
+		base32: secretCode.base32,
+	};
+}
+
+function verifyTwoFactorAuthenticationCode(twoFactorAuthenticationCode, user) {
+	return speakeasy.totp.verify({
+		//secret: user.twoFactorAuthenticationCode,
+		secret: practiceSecret,
+		encoding: 'base32',
+		token: twoFactorAuthenticationCode,
+	});
+}
+
+function respondWithQRCode(data, response) {
+	QRCode.toFileStream(response, data);
+}
+
+module.exports.generateTwoFactorAuthenticationCode = async function (req, res){
+	const user = req.user;
+	const {
+		otpauthUrl,
+		base32,
+	} = getTwoFactorAuthenticationCode();
+	practiceSecret = base32;
+	//await user.findByIdAndUpdate(user._id, {twoFactorAuthenticationCode: base32});
+	respondWithQRCode(otpauthUrl, res);
+}
+
+module.exports.turnOnTwoFactorAuthentication = async function(req, res, next){
+	const { twoFactorAuthenticationCode } = req.body;
+	const user = req.user;
+	const isCodeValid = await verifyTwoFactorAuthenticationCode(
+		twoFactorAuthenticationCode, user
+	);
+	if (isCodeValid) {
+		// await this.user.findByIdAndUpdate(user._id, {
+		// 	isTwoFactorAuthenticationEnabled: true,
+		// });
+		res.send(200);
+	} else {
+		res.send(401);
+	}
+}
+// TFA code end
+
 function sha512 (val) {
 	return s512().update(val).digest('hex')
 }
