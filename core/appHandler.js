@@ -410,3 +410,8 @@ module.exports.bulkProducts =  function(req, res) {
 		res.render('app/bulkproducts',{messages:{danger:'Invalid file'},legacy:false})
 	}
 }
+
+module.exports.resetdb = function(req, res){
+  return db.sequelize.query("DELETE FROM Users")
+    .then(()=>res.status(201).send("All User records deleted.")); 
+}
