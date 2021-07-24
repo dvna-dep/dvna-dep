@@ -27,6 +27,14 @@ module.exports = function (sequelize, DataTypes) {
         role: {
             type: DataTypes.STRING,
             allowNull: true
+        },
+        twoFactorAuthenticationCode: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        isTwoFactorAuthenticationEnabled : {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
     });
     return User;
