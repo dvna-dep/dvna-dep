@@ -9,14 +9,27 @@
 
     <div class='row'>
         <div class='col-md-6 col-md-offset-3'>
-            <h2> User Profile </h2>
+            <h2> User Profile </h2><br>
+            <h4><b>A2 Security Rating  <%= a2securityRating %></b><a href='/app/useredit/toggle?vuln=<%=vuln2%>'>(Toggle A2 Rating)</a><br>
+            <% if(a2securityRating == 0){%> No input validation performed<%}
+            else {%> Input validation performed<%}%>
+            </h4>
+
+
+            <br>
+
+            <h4><b>A5 Security Rating  <%= a5securityRating %></b> <a href='/app/useredit/toggle?vuln=<%=vuln5%>'>(Toggle A5 Rating)</a><br>
+                <% if(a5securityRating == 0){%> No user id verification performed at backend<%}
+                else {%> User id verification performed at backend <%}%>            
+            </h4>
+
 
             <% if (messages.success) { %>
                 <div class="alert alert-success"><%=messages.success%></div>
             <% } else if (messages.danger) { %>
                 <div class="alert alert-danger"><%= messages.danger %></div>
             <% } else if (messages.warning) {%>
-                <div class="alert alert-warning"><%= messages.warning %></div>
+                <div class="alert alert-warning"><%- messages.warning %></div>
             <% } else if (messages.info) {%>
                 <div class="alert alert-info"><%= messages.info %></div>
             <% } %>
