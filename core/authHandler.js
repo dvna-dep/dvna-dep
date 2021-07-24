@@ -18,25 +18,20 @@ const badPWmsg = "Bad Password:<br>" + pwLength + pwLower + pwUpper + pwNumber +
 //modeled after https://wanago.io/2019/07/22/nodejs-two-factor-authentication/
 var speakeasy = require('speakeasy');
 var QRCode = require ('qrcode');
-const { response } = require('express')
-
-var practiceSecret; 
 
 function getTwoFactorAuthenticationCode() {
 	const secretCode = speakeasy.generateSecret({
 		name: 'DVNA-DEP'
 	});
-	practiceSecret = secretCode.base32;
 	return {
 		otpauthUrl: secretCode.otpauth_url,
 		base32: secretCode.base32,
 	};
 }
 
-function verifyTwoFactorAuthenticationCode(twoFactorAuthenticationCode, user) {
+module.exports.verifyTwoFactorAuthenticationCode = async function (twoFactorAuthenticationCode, user) {
 	return speakeasy.totp.verify({
-		//secret: user.twoFactorAuthenticationCode,
-		secret: practiceSecret,
+		secret: user.twoFactorAuthenticationCode,
 		encoding: 'base32',
 		token: twoFactorAuthenticationCode,
 	});
@@ -46,14 +41,23 @@ function respondWithQRCode(data, response) {
 	QRCode.toFileStream(response, data);
 }
 
+async function saveUser2FA(user, base32){
+	user.twoFactorAuthenticationCode = base32;
+	await user.save();
+}
+
+async function enable2FA(user){
+	user.isTwoFactorAuthenticationEnabled = true;
+	await user.save();
+}
+
 module.exports.generateTwoFactorAuthenticationCode = async function (req, res){
 	const user = req.user;
 	const {
 		otpauthUrl,
 		base32,
 	} = getTwoFactorAuthenticationCode();
-	practiceSecret = base32;
-	//await user.findByIdAndUpdate(user._id, {twoFactorAuthenticationCode: base32});
+	await saveUser2FA(user, base32);
 	respondWithQRCode(otpauthUrl, res);
 }
 
@@ -64,10 +68,9 @@ module.exports.turnOnTwoFactorAuthentication = async function(req, res, next){
 		twoFactorAuthenticationCode, user
 	);
 	if (isCodeValid) {
-		// await this.user.findByIdAndUpdate(user._id, {
-		// 	isTwoFactorAuthenticationEnabled: true,
-		// });
-		res.send(200);
+		await enable2FA(user);
+		res.status(200).send();
+		res.flash(`2FA enabled for user ${user.login}`, true);
 	} else {
 		res.send(401);
 	}
