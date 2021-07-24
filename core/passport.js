@@ -98,7 +98,7 @@ module.exports = function (passport) {
                             } else {
                                 return done(null, false, req.flash('danger', 'Input field(s) missing'));
                             }   
-                        } else if(req.body.securityRating == 1){
+                        } else if(req.body.securityRating >= 1){
                             if(!vh.vEmail(req.body.email)){
                                 return done(null, false, req.flash('danger', 'Invalid Email'));
                             }
