@@ -2,6 +2,7 @@ var db = require('../models')
 var LocalStrategy = require('passport-local').Strategy
 var bCrypt = require('bcrypt')
 var vh = require('./validationHandler')
+var authHandler = require('./authHandler.js')
 
 
 const pwLength = "- Must contain at least 8 characters<br>"
@@ -43,13 +44,24 @@ module.exports = function (passport) {
             }).then(function (user) {
                 if (!user) {
                     return done(null, false, req.flash('danger', 'Invalid Credentials'))
-                }
+                };
                 if (!isValidPassword(user, password)) {
                     return done(null, false, req.flash('danger', 'Invalid Credentials'))
-                }
-                return done(null, user);
-            });
-        }))
+                };
+                if (!user.isTwoFactorAuthenticationEnabled) {
+                    return done(null, user);
+                } else {
+                    console.log(user);
+                    const totpToken = req.body.twoFactorAuthenticationCode;
+                    return authHandler.verifyTwoFactorAuthenticationCode(totpToken, user)
+                    .then(()=> {return done(null, user)})
+                    .catch(error => {
+                            console.log(error);
+                            res.send(401);
+                    })
+                };
+            })
+        }));
 
     var isValidPassword = function (user, password) {
         return bCrypt.compareSync(password, user.password);
@@ -75,7 +87,8 @@ module.exports = function (passport) {
                                         email: req.body.email,
                                         password: createHash(password),
                                         name: req.body.name,
-                                        login: username
+                                        login: username,
+                                        isTwoFactorAuthenticationEnabled: false
                                     }).then(function (user) {
                                         return done(null, user)
                                     })
@@ -98,7 +111,8 @@ module.exports = function (passport) {
                                         email: req.body.email,
                                         password: createHash(password),
                                         name: req.body.name,
-                                        login: username
+                                        login: username,
+                                        isTwoFactorAuthenticationEnabled: false
                                     }).then(function (user) {
                                         return done(null, user)
                                     })
