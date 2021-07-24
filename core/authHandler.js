@@ -29,13 +29,14 @@ function getTwoFactorAuthenticationCode() {
 	};
 }
 
-module.exports.verifyTwoFactorAuthenticationCode = async function (twoFactorAuthenticationCode, user) {
+async function verifyTwoFactorAuthenticationCode (twoFactorAuthenticationCode, user) {
 	return speakeasy.totp.verify({
 		secret: user.twoFactorAuthenticationCode,
 		encoding: 'base32',
 		token: twoFactorAuthenticationCode,
 	});
 }
+module.exports.verifyTwoFactorAuthenticationCode = verifyTwoFactorAuthenticationCode;
 
 function respondWithQRCode(data, response) {
 	QRCode.toFileStream(response, data);
@@ -51,14 +52,16 @@ async function enable2FA(user){
 	await user.save();
 }
 
-module.exports.generateTwoFactorAuthenticationCode = async function (req, res){
+module.exports.generateTwoFactorAuthenticationCode = async function (req, res, next){
 	const user = req.user;
 	const {
 		otpauthUrl,
 		base32,
 	} = getTwoFactorAuthenticationCode();
 	await saveUser2FA(user, base32);
-	respondWithQRCode(otpauthUrl, res);
+	req.qrCodeURL = await QRCode.toDataURL(otpauthUrl);
+  //respondWithQRCode(otpauthUrl, res);
+  return next();
 }
 
 module.exports.turnOnTwoFactorAuthentication = async function(req, res, next){
@@ -69,9 +72,9 @@ module.exports.turnOnTwoFactorAuthentication = async function(req, res, next){
 	);
 	if (isCodeValid) {
 		await enable2FA(user);
-		res.status(200).send();
-		res.flash(`2FA enabled for user ${user.login}`, true);
-	} else {
+		req.flash(`2FA enabled for user ${user.login}`, true);
+    next();
+} else {
 		res.send(401);
 	}
 }
