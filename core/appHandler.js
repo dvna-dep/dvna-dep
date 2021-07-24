@@ -10,6 +10,15 @@ var vh = require('./validationHandler');
 const Op = db.Sequelize.Op
 var ratingState = require('../config/ratingState')
 
+const pwLength = "- Must contain at least 8 characters<br>"
+const pwLower = "- Must contain at least 1 lowercase letter<br>"
+const pwUpper = "- Must contain at least 1 uppercase letter<br>"
+const pwNumber = "- Must contain at least 1 number<br>"
+const pwSpec = "- Must contain at least 1 special character"
+const badPWmsg = "Bad Password:<br>" + pwLength + pwLower + pwUpper + pwNumber + pwSpec
+
+
+
 module.exports.userSearch = function (req, res) {
     
 	if(req.body.securityRating == '0') {
@@ -205,6 +214,10 @@ module.exports.modifyProductSubmit = function (req, res) {
 
 module.exports.userEdit = function (req, res) {
 	res.render('app/useredit', {
+		vuln5: 'a5_broken_access_control',
+		vuln2: 'a2_broken_auth',
+		a5securityRating: ratingState['a5_broken_access_control'],
+		a2securityRating: ratingState['a2_broken_auth'],
 		userId: req.user.id,
 		userEmail: req.user.email,
 		userName: req.user.name
@@ -212,44 +225,104 @@ module.exports.userEdit = function (req, res) {
 }
 
 module.exports.userEditSubmit = function (req, res) {
+	userEditSubmitCheckA5SecurityRating(req, res)
+}
+
+function userEditSubmitCheckA5SecurityRating(req, res){
+	if(ratingState['a5_broken_access_control'] == 0)
+		editUserInfo(req, res);
+	else
+		editUserInfoSecurely(req, res);
+}
+
+function editUserInfoSecurely(req, res){
+	if(req.user.id == req.body.id){
+		editUserInfo(req, res)
+	} else {
+		userEditMSGandRender(req, res, true, 'warning', 'Invalid Request to Edit User Data')
+	}
+	return
+}
+
+function editUserInfo(req, res){
 	db.User.find({
 		where: {
 			'id': req.body.id
 		}		
 	}).then(user =>{
-		if(req.body.password.length>0){
-			if(req.body.password.length>0){
-				if (req.body.password == req.body.cpassword) {
-					user.password = bCrypt.hashSync(req.body.password, bCrypt.genSaltSync(10), null)
-				}else{
-					req.flash('warning', 'Passwords dont match')
-					res.render('app/useredit', {
-						userId: req.user.id,
-						userEmail: req.user.email,
-						userName: req.user.name,
-					})
-					return		
-				}
-			}else{
-				req.flash('warning', 'Invalid Password')
-				res.render('app/useredit', {
-					userId: req.user.id,
-					userEmail: req.user.email,
-					userName: req.user.name,
-				})
-				return
-			}
+		validateUserInfo(user, req, res)
+	})
+}
+
+function validateUserInfo(user, req, res){
+	if(ratingState['a2_broken_auth'] == 0)
+		changeUserInfoWithoutValidation(user, req, res)
+	else
+		changeUserInfoWithValidation(user, req, res)
+}
+
+function changeUserInfoWithoutValidation(user, req, res){
+	if(req.body.password.length>0)
+		changePW(user, req, res)
+	user.name = req.body.name
+	user.email = req.body.email
+	user.save().then(function () {
+		userEditMSGandRender(req, res, true, 'success', 'Updated successfully')
+	})
+}
+
+function changeUserInfoWithValidation(user, req, res){
+	if(req.body.password.length>0){
+		if(vh.vPassword(req.body.password)){
+			changePW(user, req, res)
 		}
-		user.email = req.body.email
-		user.name = req.body.name
-		user.save().then(function () {
-			req.flash('success',"Updated successfully")
-			res.render('app/useredit', {
-				userId: req.body.id,
-				userEmail: req.body.email,
-				userName: req.body.name,
-			})
-		})
+		else{
+			userEditMSGandRender(req, res, true, 'warning', badPWmsg)
+			return
+		}
+	}
+	user.name = (req.body.name.length > 0) ? user.name = req.body.name : user.name = user.name; 
+	if (req.body.email.length > 0){
+		if(vh.vEmail(req.body.email)){
+			user.email = req.body.email
+		} else {
+			userEditMSGandRender(req, res, true, 'warning', 'Invalid Email')
+			return
+		}
+	} else{
+		user.name = user.name				
+	}
+	user.save().then(function () {
+		userEditMSGandRender(req, res, true, 'success', 'Updated successfully')
+	})
+}
+
+function changePW(user, req, res){
+	if(req.body.password.length>0){
+		if (req.body.password == req.body.cpassword) {
+			user.password = bCrypt.hashSync(req.body.password, bCrypt.genSaltSync(10), null)
+		}else{
+			userEditMSGandRender(req, res, true, 'warning', 'Passwords dont match')
+			return		
+		}
+	}else{
+		userEditMSGandRender(req, res, true, 'warning', 'Invalid Password')
+		return
+	}
+}
+
+function userEditMSGandRender(req, res, flashBool, flashType, flashMSG){
+	if(flashBool == true){
+		req.flash(flashType,flashMSG)
+	}
+	res.render('app/useredit', {
+		vuln5: 'a5_broken_access_control',
+		vuln2: 'a2_broken_auth',
+		a5securityRating: ratingState['a5_broken_access_control'],
+		a2securityRating: ratingState['a2_broken_auth'],
+		userId: req.body.id,
+		userEmail: req.body.email,
+		userName: req.body.name
 	})
 }
 
