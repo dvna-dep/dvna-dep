@@ -74,7 +74,7 @@ module.exports = function (passport) {
 
 	router.post('/register', function(req, res, next){
 		const rating = ratingState.register;
-    const redirect = rating == 2 ? '/2fa/generate' : '/learn';
+    const redirect = rating == 2 ? '/setup2fa' : '/learn';
     passport.authenticate('signup', {
 			successRedirect: redirect,
 			failureRedirect: '/register?securityRating=' + req.body.securityRating,
@@ -88,10 +88,19 @@ module.exports = function (passport) {
 		res.render('resetpw', {login: req.login, token: req.token, securityRating: req.securityRating})
 	})
 
-	router.post('/2fa/generate', authHandler.generateTwoFactorAuthenticationCode);
+  router.get('/setup2fa', authHandler.isAuthenticated, authHandler.generateTwoFactorAuthenticationCode, 
+    function(req, res){
+      res.render('setup2fa',{
+        login: req.user.login,
+        qrCodeURL: req.qrCodeURL
+      });
+  })
+  
+  router.post('/setup2fa', authHandler.isAuthenticated, authHandler.turnOnTwoFactorAuthentication);
+
+  router.post('/2fa/generate', authHandler.generateTwoFactorAuthenticationCode);
 
 	router.post('/2fa/turn-on', authHandler.turnOnTwoFactorAuthentication);
-
 
 	return router
 }
