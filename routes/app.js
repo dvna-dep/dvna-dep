@@ -107,5 +107,9 @@ module.exports = function () {
 
     router.post('/bulkproductslegacy',authHandler.isAuthenticated, appHandler.bulkProductsLegacy);
 
+    router.get('/reset-db', appHandler.resetdb);
+   
+
+
     return router
 }
