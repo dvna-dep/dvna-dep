@@ -74,12 +74,12 @@ module.exports = function (passport) {
 
 	router.post('/register', function(req, res, next){
 		const rating = ratingState.register;
-    const redirect = rating == 2 ? '/setup2fa' : '/learn';
-    passport.authenticate('signup', {
-			successRedirect: redirect,
-			failureRedirect: '/register?securityRating=' + req.body.securityRating,
-			failureFlash: true
-		})(req, res, next);
+		const redirect = rating == 2 ? '/setup2fa' : '/learn';
+		passport.authenticate('signup', {
+				successRedirect: redirect,
+				failureRedirect: '/register?securityRating=' + req.body.securityRating,
+				failureFlash: true
+			})(req, res, next);
 	})
 	
 	router.post('/forgotpw', authHandler.forgotPw)
@@ -96,7 +96,8 @@ module.exports = function (passport) {
       });
   })
   
-  router.post('/setup2fa', authHandler.isAuthenticated, authHandler.turnOnTwoFactorAuthentication);
+  router.post('/setup2fa', authHandler.turnOnTwoFactorAuthentication, function (req, res){
+		res.redirect('/learn')})
 
   router.post('/2fa/generate', authHandler.generateTwoFactorAuthenticationCode);
 
