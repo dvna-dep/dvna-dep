@@ -42,8 +42,9 @@ module.exports = function (passport) {
 		res.render('learn',{vulnerabilities:vulnDict})
 	})
 
-	router.get('/register', authHandler.isNotAuthenticated, function (req, res) {
-		var query_rating = req.query.securityRating ? req.query.securityRating : 0;	
+	router.get('/register', authHandler.isNotAuthenticated, function (req, res){
+		var query_rating = req.query.securityRating ? req.query.securityRating : 0;
+    ratingState['register'] = query_rating;
 		res.render('register', {
 			ratings: ratingsDict['register'],
 			securityRating: query_rating
@@ -72,8 +73,10 @@ module.exports = function (passport) {
 	}))
 
 	router.post('/register', function(req, res, next){
-		passport.authenticate('signup', {
-			successRedirect: '/learn',
+		const rating = ratingState.register;
+    const redirect = rating == 2 ? '/2fa/generate' : '/learn';
+    passport.authenticate('signup', {
+			successRedirect: redirect,
 			failureRedirect: '/register?securityRating=' + req.body.securityRating,
 			failureFlash: true
 		})(req, res, next);
