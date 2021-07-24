@@ -114,7 +114,8 @@ module.exports = function (passport) {
                                         login: username,
                                         isTwoFactorAuthenticationEnabled: false
                                     }).then(function (user) {
-                                        return done(null, user)
+                                        req.user = user;
+                                        return done(null, user);
                                     })
                                 } else {
                                     return done(null, false, req.flash('danger', 'Passwords do not match'));

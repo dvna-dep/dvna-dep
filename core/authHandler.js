@@ -65,16 +65,16 @@ module.exports.generateTwoFactorAuthenticationCode = async function (req, res, n
 }
 
 module.exports.turnOnTwoFactorAuthentication = async function(req, res, next){
-	const { twoFactorAuthenticationCode } = req.body;
 	const user = req.user;
+  	const { twoFactorAuthenticationCode } = req.body;
 	const isCodeValid = await verifyTwoFactorAuthenticationCode(
 		twoFactorAuthenticationCode, user
 	);
 	if (isCodeValid) {
 		await enable2FA(user);
 		req.flash(`2FA enabled for user ${user.login}`, true);
-    next();
-} else {
+    return next();
+	} else {
 		res.send(401);
 	}
 }
