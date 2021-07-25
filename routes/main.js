@@ -71,7 +71,11 @@ module.exports = function (passport) {
 		failureFlash: true
 	}), function (req, res) {
 		if (req.user.isTwoFactorAuthenticationEnabled) {
-			res.redirect('/auth2fa');
+			console.log(req.body);
+			res.render('auth2fa', {
+				username: req.body.username,
+				password: req.body.password
+			});
 		}
 		res.redirect('/learn');
 	}
@@ -107,9 +111,14 @@ module.exports = function (passport) {
 	})
 
 	router.get('/auth2fa', function (req, res) {
-		res.render('auth2fa');
+		res.render('auth2fa', {
+			username: req.body.username,
+			password: req.body.password
+		});
 	})
+
 	router.post('/auth2fa', async function (req, res) {
+		console.log('117', req.body);
 		const user = req.user;
 		const { twoFactorAuthenticationCode } = req.body;
 		const isCodeValid = await authHandler.verifyTwoFactorAuthenticationCode(
