@@ -34,8 +34,8 @@ module.exports = function (passport) {
     })
 
     passport.use('login', new LocalStrategy({
-            passReqToCallback: true
-        },
+        passReqToCallback: true
+    },
         function (req, username, password, done) {
             db.User.findOne({
                 where: {
@@ -48,19 +48,8 @@ module.exports = function (passport) {
                 if (!isValidPassword(user, password)) {
                     return done(null, false, req.flash('danger', 'Invalid Credentials'))
                 };
-                if (!user.isTwoFactorAuthenticationEnabled) {
-                    return done(null, user);
-                } else {
-                    console.log(user);
-                    const totpToken = req.body.twoFactorAuthenticationCode;
-                    return authHandler.verifyTwoFactorAuthenticationCode(totpToken, user)
-                    .then(()=> {return done(null, user)})
-                    .catch(error => {
-                            console.log(error);
-                            res.send(401);
-                    })
-                };
-            })
+                return done(null, user);
+            });
         }));
 
     var isValidPassword = function (user, password) {
@@ -68,8 +57,8 @@ module.exports = function (passport) {
     }
 
     passport.use('signup', new LocalStrategy({
-            passReqToCallback: true
-        },
+        passReqToCallback: true
+    },
         function (req, username, password, done) {
             findOrCreateUser = function () {
                 db.User.findOne({
@@ -80,7 +69,7 @@ module.exports = function (passport) {
                     if (user) {
                         return done(null, false, req.flash('danger', 'Account Already Exists'));
                     } else {
-                        if(req.body.securityRating == 0){
+                        if (req.body.securityRating == 0) {
                             if (req.body.email && req.body.password && req.body.username && req.body.cpassword && req.body.name) {
                                 if (req.body.cpassword == req.body.password) {
                                     db.User.create({
@@ -97,12 +86,12 @@ module.exports = function (passport) {
                                 }
                             } else {
                                 return done(null, false, req.flash('danger', 'Input field(s) missing'));
-                            }   
-                        } else if(req.body.securityRating >= 1){
-                            if(!vh.vEmail(req.body.email)){
+                            }
+                        } else if (req.body.securityRating >= 1) {
+                            if (!vh.vEmail(req.body.email)) {
                                 return done(null, false, req.flash('danger', 'Invalid Email'));
                             }
-                            if(!vh.vPassword(req.body.password)){
+                            if (!vh.vPassword(req.body.password)) {
                                 return done(null, false, req.flash('danger', badPWmsg));
                             }
                             if (req.body.email && req.body.password && req.body.username && req.body.cpassword && req.body.name) {
