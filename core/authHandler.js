@@ -4,7 +4,7 @@ var md5 = require('md5')
 var vh = require('./validationHandler')
 var cryptoRandomString = require('crypto-random-string')
 var s512 = require('hash.js/lib/hash/sha/512')
-var coolDownTime = 5*60*1000 // 5 mins
+var coolDownTime = 5 * 60 * 1000 // 5 mins
 const ratingState = require('../config/ratingState')
 
 const pwLength = "- Must contain at least 8 characters<br>"
@@ -17,7 +17,7 @@ const badPWmsg = "Bad Password:<br>" + pwLength + pwLower + pwUpper + pwNumber +
 // TFA code start
 //modeled after https://wanago.io/2019/07/22/nodejs-two-factor-authentication/
 var speakeasy = require('speakeasy');
-var QRCode = require ('qrcode');
+var QRCode = require('qrcode');
 
 function getTwoFactorAuthenticationCode() {
 	const secretCode = speakeasy.generateSecret({
@@ -29,7 +29,7 @@ function getTwoFactorAuthenticationCode() {
 	};
 }
 
-async function verifyTwoFactorAuthenticationCode (twoFactorAuthenticationCode, user) {
+async function verifyTwoFactorAuthenticationCode(twoFactorAuthenticationCode, user) {
 	return speakeasy.totp.verify({
 		secret: user.twoFactorAuthenticationCode,
 		encoding: 'base32',
@@ -38,21 +38,18 @@ async function verifyTwoFactorAuthenticationCode (twoFactorAuthenticationCode, u
 }
 module.exports.verifyTwoFactorAuthenticationCode = verifyTwoFactorAuthenticationCode;
 
-function respondWithQRCode(data, response) {
-	QRCode.toFileStream(response, data);
-}
 
-async function saveUser2FA(user, base32){
+async function saveUser2FA(user, base32) {
 	user.twoFactorAuthenticationCode = base32;
 	await user.save();
 }
 
-async function enable2FA(user){
+async function enable2FA(user) {
 	user.isTwoFactorAuthenticationEnabled = true;
 	await user.save();
 }
 
-module.exports.generateTwoFactorAuthenticationCode = async function (req, res, next){
+module.exports.generateTwoFactorAuthenticationCode = async function (req, res, next) {
 	const user = req.user;
 	const {
 		otpauthUrl,
@@ -60,27 +57,26 @@ module.exports.generateTwoFactorAuthenticationCode = async function (req, res, n
 	} = getTwoFactorAuthenticationCode();
 	await saveUser2FA(user, base32);
 	req.qrCodeURL = await QRCode.toDataURL(otpauthUrl);
-  //respondWithQRCode(otpauthUrl, res);
-  return next();
+	return next();
 }
 
-module.exports.turnOnTwoFactorAuthentication = async function(req, res, next){
+module.exports.turnOnTwoFactorAuthentication = async function (req, res, next) {
 	const user = req.user;
-  	const { twoFactorAuthenticationCode } = req.body;
+	const { twoFactorAuthenticationCode } = req.body;
 	const isCodeValid = await verifyTwoFactorAuthenticationCode(
 		twoFactorAuthenticationCode, user
 	);
 	if (isCodeValid) {
 		await enable2FA(user);
 		req.flash(`2FA enabled for user ${user.login}`, true);
-    return next();
+		return next();
 	} else {
 		res.send(401);
 	}
 }
 // TFA code end
 
-function sha512 (val) {
+function sha512(val) {
 	return s512().update(val).digest('hex')
 }
 
@@ -88,23 +84,22 @@ var createHash = function (password) {
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
 
-module.exports.isAdmin = function (req, res, next){
+module.exports.isAdmin = function (req, res, next) {
 	var a5securityRating = ratingState['a5_broken_access_control']
-	if(a5securityRating == 1) {
+	if (a5securityRating == 1) {
 		authenticateIsAdmin(req, res, next)
 	}
-	else{
+	else {
 		next()
 	}
 }
 
-function authenticateIsAdmin(req, res, next){
-	if(req.user.role=='admin')
-	{
+function authenticateIsAdmin(req, res, next) {
+	if (req.user.role == 'admin') {
 		next()
 	} else
 		res.status(401).send('Unauthorized')
-} 
+}
 
 
 module.exports.isAuthenticated = function (req, res, next) {
@@ -128,17 +123,17 @@ module.exports.forgotPw = function (req, res) {
 				'login': req.body.login
 			}
 		}).then(user => {
-			if (user) {			
-				if(req.body.securityRating == '0'){
+			if (user) {
+				if (req.body.securityRating == '0') {
 					// Send reset link via email happens here
 					var md5token = md5(req.body.login);
-					req.flash('info', 'Email has been sent < http://127.0.0.1:9090/resetpw?login='+req.body.login+'&token=' + md5token+'&securityRating='+ req.body.securityRating + ' >')
+					req.flash('info', 'Email has been sent < http://127.0.0.1:9090/resetpw?login=' + req.body.login + '&token=' + md5token + '&securityRating=' + req.body.securityRating + ' >')
 					res.redirect('/login')
 				}
-				else if(req.body.securityRating == '1'){
-					db.Passreset.findAll({limit:1,where:{'userId':user.id},order:[['createdAt','DESC']]}).then(record => {
+				else if (req.body.securityRating == '1') {
+					db.Passreset.findAll({ limit: 1, where: { 'userId': user.id }, order: [['createdAt', 'DESC']] }).then(record => {
 						passreset = record[0]
-						if(!passreset || passreset.used==true || (Date.now() - passreset.requestedAt)>coolDownTime){
+						if (!passreset || passreset.used == true || (Date.now() - passreset.requestedAt) > coolDownTime) {
 							pr = new db.Passreset()
 							var token = cryptoRandomString(30)
 							pr.userId = user.id
@@ -147,9 +142,9 @@ module.exports.forgotPw = function (req, res) {
 							pr.tokenHash = sha512(token)
 							pr.save()
 							// SEND_EMAIL (token) at this step
-							req.flash('info', 'If account exists, you will get an email on the registered email' + '< http://127.0.0.1:9090/resetpw?login='+req.body.login+'&token=' + token+'&securityRating='+ req.body.securityRating+ ' >' )
+							req.flash('info', 'If account exists, you will get an email on the registered email' + '< http://127.0.0.1:9090/resetpw?login=' + req.body.login + '&token=' + token + '&securityRating=' + req.body.securityRating + ' >')
 							res.redirect('/login')
-						}else{
+						} else {
 							// Cooldown time to prevent DoS
 							req.flash('info', 'If account exists, you will get an email on the registered email <cooldown>')
 							res.redirect('/login')
@@ -157,21 +152,21 @@ module.exports.forgotPw = function (req, res) {
 					})
 				}
 			} else {
-				if(req.body.securityRating == '0'){
+				if (req.body.securityRating == '0') {
 					req.flash('danger', "Invalid login username")
 					res.redirect('/forgotpw')
 				}
-				else if(req.body.securityRating == '1'){
+				else if (req.body.securityRating == '1') {
 					req.flash('info', 'If account exists, you will get an email on the registered email <note: invalid>')
 					res.redirect('/login')
 				}
 			}
 		})
 	} else {
-		if(req.body.securityRating == '0'){
+		if (req.body.securityRating == '0') {
 			req.flash('danger', "Invalid login username")
 		}
-		else if(req.body.securityRating == '1'){
+		else if (req.body.securityRating == '1') {
 			req.flash('danger', "Error, Username contains special charecters")
 		}
 		res.redirect('/forgotpw')
@@ -179,7 +174,7 @@ module.exports.forgotPw = function (req, res) {
 }
 
 module.exports.resetPw = function (req, res) {
-	if(req.query.securityRating == '0'){
+	if (req.query.securityRating == '0') {
 		if (req.query.login) {
 			db.User.find({
 				where: {
@@ -197,7 +192,7 @@ module.exports.resetPw = function (req, res) {
 						req.flash('danger', "Invalid reset token")
 						res.redirect('/forgotpw')
 					}
-					
+
 				} else {
 					req.flash('danger', "Invalid login username")
 					res.redirect('/forgotpw')
@@ -206,26 +201,26 @@ module.exports.resetPw = function (req, res) {
 		} else {
 			req.flash('danger', "Invalid login username")
 			res.redirect('/forgotpw')
-		}	
+		}
 	}
-	else if(req.query.securityRating == '1'){
-		if (vh.vCode(req.query.login)&&vh.vCode(req.query.token)) {
+	else if (req.query.securityRating == '1') {
+		if (vh.vCode(req.query.login) && vh.vCode(req.query.token)) {
 			db.User.find({
 				where: {
 					'login': req.query.login
 				}
 			}).then(user => {
 				if (user) {
-					db.Passreset.find({where:{'tokenHash': sha512(req.query.token)}}).then(resetpass => {
-						if(resetpass&&((Date.now() - resetpass.requestedAt)<coolDownTime)&&resetpass.used==false){
+					db.Passreset.find({ where: { 'tokenHash': sha512(req.query.token) } }).then(resetpass => {
+						if (resetpass && ((Date.now() - resetpass.requestedAt) < coolDownTime) && resetpass.used == false) {
 							res.render('resetpw', {
 								login: req.query.login,
 								token: req.query.token,
 								securityRating: req.query.securityRating
-							})							
-						}else if(resetpass){
+							})
+						} else if (resetpass) {
 							req.flash('warning', "Link Expired")
-							res.redirect('/forgotpw')							
+							res.redirect('/forgotpw')
 						} else {
 							req.flash('danger', "Invalid reset link")
 							res.redirect('/forgotpw')
@@ -233,9 +228,9 @@ module.exports.resetPw = function (req, res) {
 					})
 				} else {
 					req.flash('danger', "Invalid reset link")
-				res.redirect('/forgotpw')
-			}
-		})
+					res.redirect('/forgotpw')
+				}
+			})
 		} else {
 			req.flash('danger', "Invalid reset link")
 			res.redirect('/forgotpw')
@@ -244,7 +239,7 @@ module.exports.resetPw = function (req, res) {
 }
 
 module.exports.resetPwSubmit = function (req, res) {
-	if(req.body.securityRating == '0'){
+	if (req.body.securityRating == '0') {
 		if (req.body.password && req.body.cpassword && req.body.login && req.body.token) {
 			if (req.body.password == req.body.cpassword) {
 				db.User.find({
@@ -256,7 +251,7 @@ module.exports.resetPwSubmit = function (req, res) {
 						if (req.body.token == md5(req.body.login)) {
 							user.password = bCrypt.hashSync(req.body.password, bCrypt.genSaltSync(10), null)
 							user.save().then(function () {
-								req.flash('success', "Passowrd successfully reset <login: "+ req.body.login + " // pw: "+ req.body.password +">")
+								req.flash('success', "Passowrd successfully reset <login: " + req.body.login + " // pw: " + req.body.password + ">")
 								res.redirect('/login')
 							})
 						} else {
@@ -281,7 +276,7 @@ module.exports.resetPwSubmit = function (req, res) {
 			res.redirect('/forgotpw')
 		}
 	}
-	else if(req.body.securityRating == '1'){
+	else if (req.body.securityRating == '1') {
 		if (vh.vPassword(req.body.password) && req.body.cpassword && vh.vCode(req.body.login) && vh.vString(req.body.token)) {
 			if (req.body.password == req.body.cpassword) {
 				db.User.find({
@@ -290,17 +285,17 @@ module.exports.resetPwSubmit = function (req, res) {
 					}
 				}).then(user => {
 					if (user) {
-						db.Passreset.find({where:{'tokenHash': sha512(req.body.token)}}).then(resetpass => {
-							if(resetpass&&((Date.now() - resetpass.requestedAt)<coolDownTime)&&resetpass.used==false){
+						db.Passreset.find({ where: { 'tokenHash': sha512(req.body.token) } }).then(resetpass => {
+							if (resetpass && ((Date.now() - resetpass.requestedAt) < coolDownTime) && resetpass.used == false) {
 								user.password = createHash(req.body.password)
 								user.save()
 								resetpass.used = true
 								resetpass.save()
-								req.flash('success',"Password successfuly changed <login: " + req.body.login + " // new pw: " + req.body.password + ">")
+								req.flash('success', "Password successfuly changed <login: " + req.body.login + " // new pw: " + req.body.password + ">")
 								res.redirect('/login')
-							}else if(resetpass){
+							} else if (resetpass) {
 								req.flash('warning', "Link Expired")
-								res.redirect('/forgotpw')							
+								res.redirect('/forgotpw')
 							} else {
 								req.flash('danger', "Invalid reset link")
 								res.redirect('/forgotpw')
