@@ -80,7 +80,7 @@ module.exports = function () {
             vuln: 'a5_broken_access_control'
         })
     })
-
+   
     router.get('/redirect', appHandler.redirect)
 
     router.post('/usersearch', authHandler.isAuthenticated, appHandler.userSearch)
@@ -92,6 +92,14 @@ module.exports = function () {
     router.post('/modifyproduct', authHandler.isAuthenticated, appHandler.modifyProductSubmit)
 
     router.post('/useredit', authHandler.isAuthenticated, appHandler.userEditSubmit)
+
+    router.get('/useredit/toggle', authHandler.isAuthenticated, function (req, res) {
+        if(ratingState[req.query.vuln] == 1)
+            ratingState[req.query.vuln] = 0
+        else
+            ratingState[req.query.vuln] = 1
+        res.redirect('/app/useredit/')
+    })
 
     router.post('/calc', authHandler.isAuthenticated, appHandler.calc)
 
