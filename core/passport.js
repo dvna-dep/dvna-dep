@@ -32,38 +32,38 @@ module.exports = function (passport) {
 
         })
     })
-  passport.use('login-2fa', new LocalStrategy({
-    passReqToCallback: true
-  },
-    async function (req, username, password, done) {
-      const user = await db.User.findOne({
-        where: {
-          'login': username
-        }
-      });
-      if (!user) {
-        return done(null, false, req.flash('danger', 'Invalid Credentials'))
-      };
-      if (!isValidPassword(user, password)) {
-        return done(null, false, req.flash('danger', 'Invalid Credentials'))
-      };
-      return done(null, user);
+    passport.use('login-2fa', new LocalStrategy({
+        passReqToCallback: true
     },
-    async function (user, done) {
-      if (!user.isTwoFactorAuthenticationEnabled){
-        return done(null, false, req.flash('danger', `2FA not setup for user ${user.name}`));
-      }
-      const { twoFactorAuthenticationCode } = req.body;
-      const isCodeValid = await authHandler.verifyTwoFactorAuthenticationCode(
-        twoFactorAuthenticationCode, user
-      );
-      if (isCodeValid) {
-        return done(null, user);
-      } else {
-        return (null, false, req.flash('danger', '2FA authentication failed'));
-      }
-    }
-  ));
+        async function (req, username, password, done) {
+            const user = await db.User.findOne({
+                where: {
+                    'login': username
+                }
+            });
+            if (!user) {
+                return done(null, false, req.flash('danger', 'Invalid Credentials'))
+            };
+            if (!isValidPassword(user, password)) {
+                return done(null, false, req.flash('danger', 'Invalid Credentials'))
+            };
+            return done(null, user);
+        },
+        async function (user, done) {
+            if (!user.isTwoFactorAuthenticationEnabled) {
+                return done(null, false, req.flash('danger', `2FA not setup for user ${user.name}`));
+            }
+            const { twoFactorAuthenticationCode } = req.body;
+            const isCodeValid = await authHandler.verifyTwoFactorAuthenticationCode(
+                twoFactorAuthenticationCode, user
+            );
+            if (isCodeValid) {
+                return done(null, user);
+            } else {
+                return (null, false, req.flash('danger', '2FA authentication failed'));
+            }
+        }
+    ));
 
     passport.use('login', new LocalStrategy({
         passReqToCallback: true

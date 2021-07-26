@@ -10,12 +10,12 @@ module.exports = function (passport) {
 	})
 
 	router.get('/login', authHandler.isNotAuthenticated, function (req, res) {
-    var query_rating = req.query.securityRating ? req.query.securityRating : ratingState['login'];
+		var query_rating = req.query.securityRating ? req.query.securityRating : ratingState['login'];
 		ratingState['login'] = query_rating;
-    res.render('login',{
-      ratings: ratingsDict['login'],
-      securityRating: query_rating
-    })
+		res.render('login', {
+			ratings: ratingsDict['login'],
+			securityRating: query_rating
+		})
 	})
 
 	router.get('/learn/vulnerability/:vuln', authHandler.isAuthenticated, function (req, res) {
@@ -72,20 +72,20 @@ module.exports = function (passport) {
 	router.get('/resetpw', authHandler.resetPw)
 
 	router.post('/login', function (req, res) {
-    if (ratingState['login'] == 0){
-      passport.authenticate('login', {
-        successRedirect: '/learn',
-        failureRedirect: '/login',
-        failureFlash: true
-      })(req, res);
-    } else {
-      console.log('81 call to isAuthenticated', req.isAuthenticated());
-      res.render('auth2fa', {
-        username: req.body.username,
-        password: req.body.password
-      });
-    }
-  })
+		if (ratingState['login'] == 0) {
+			passport.authenticate('login', {
+				successRedirect: '/learn',
+				failureRedirect: '/login',
+				failureFlash: true
+			})(req, res);
+		} else {
+			console.log('81 call to isAuthenticated', req.isAuthenticated());
+			res.render('auth2fa', {
+				username: req.body.username,
+				password: req.body.password
+			});
+		}
+	})
 
 
 
@@ -118,36 +118,19 @@ module.exports = function (passport) {
 	})
 
 	router.get('/auth2fa', function (req, res) {
-    res.render('auth2fa', {
+		res.render('auth2fa', {
 			username: req.body.username,
 			password: req.body.password
 		});
 	})
 
-  router.post('/auth2fa', function(req, res){
-    console.log("should not be authenticated", req.isAuthenticated());
-    passport.authenticate('login-2fa', {
-      successRedirect: '/learn',
-      failureRedirect: '/login',
-      failureFlash: true
-    })(req,res);
-  })
-//	router.post('/auth2fa', async function (req, res) {
-//		console.log('117', req.body);
-//		const user = req.user;
-//		const { twoFactorAuthenticationCode } = req.body;
-//		const isCodeValid = await authHandler.verifyTwoFactorAuthenticationCode(
-//			twoFactorAuthenticationCode, user
-//		);
-//		if (isCodeValid) {
-//			req.flash("2FA succeeded", true);
-//			return res.redirect('/learn');
-//		} else {
-//			req.user = '';
-//			res.send(401);
-//		}
-//	})
-
+	router.post('/auth2fa', function (req, res) {
+		passport.authenticate('login-2fa', {
+			successRedirect: '/learn',
+			failureRedirect: '/login',
+			failureFlash: true
+		})(req, res);
+	})
 	router.post('/2fa/generate', authHandler.generateTwoFactorAuthenticationCode);
 
 	router.post('/2fa/turn-on', authHandler.turnOnTwoFactorAuthentication);
