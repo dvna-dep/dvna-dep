@@ -1,76 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <% include common/head %>
+	<% include common/head %>
 </head>
+
 <body>
-    <% include common/navigation %>
-    <div class='container' style='min-height: 450px'><div class='row'><div class='col-md-12'>
-        <div class='row'>
-            <div class='col-md-6 col-md-offset-3'>
-                <div class='page-header'>
-                    <h2>Login</h2>
-                </div>
-				<% if (messages.success) { %>
-					<div class="alert alert-success"><%=messages.success%></div>
-				<% } else if (messages.danger) { %>
-					<div class="alert alert-danger"><%= messages.danger %></div>
-				<% } else if (messages.warning) {%> 
-					<div class="alert alert-warning"><%= messages.warning %></div>
-				<% } else if (messages.info) {%> 
-					<div class="alert alert-info"><%= messages.info %></div>
-				<% } %>
-                <div class='page-body'>
-				<form id="login" name="login" action="/login" method="post">
-				    <fieldset>
+	<% include common/navigation %>
+		<div class='container' style='min-height: 450px'>
+			<div class='row'>
+				<div class='col-md-12'>
+					<div class='row'>
+						<div class='col-md-6 col-md-offset-3'>
+							<div class='page-header'>
+								<h2>Login</h2>
+							</div>
+							<% if (messages.success) { %>
+								<div class="alert alert-success">
+									<%=messages.success%>
+								</div>
+								<% } else if (messages.danger) { %>
+									<div class="alert alert-danger">
+										<%= messages.danger %>
+									</div>
+									<% } else if (messages.warning) {%>
+										<div class="alert alert-warning">
+											<%= messages.warning %>
+										</div>
+										<% } else if (messages.info) {%>
+											<div class="alert alert-info">
+												<%= messages.info %>
+											</div>
+											<% } %>
+												<div class='page-body'>
+													<form id="login" name="login" action="/login" method="post">
+														<fieldset>
 
-				        <div class="form-group ">
-				            <label class="  control-label" for="login_login">Login </label>
-				            <div class="  controls">
+															<div class="form-group ">
+																<label class="  control-label" for="login_login">Login
+																</label>
+																<div class="  controls">
 
-				                <input type="text" name="username" value="" id="login_login" class="form-control" placeholder="Enter login" />
-				            </div>
-				        </div>
+																	<input type="text" name="username" value=""
+																		id="login_login" class="form-control"
+																		placeholder="Enter login" />
+																</div>
+															</div>
 
-				        <div class="form-group ">
-				            <label class="  control-label" for="login_password">Password </label>
-				            <div class="  controls">
+															<div class="form-group ">
+																<label class="  control-label"
+																	for="login_password">Password </label>
+																<div class="  controls">
 
-				                <input type="password" name="password" id="login_password" class="form-control" placeholder="Enter password" />
-				            </div>
-				        </div>
+																	<input type="password" name="password"
+																		id="login_password" class="form-control"
+																		placeholder="Enter password" />
+																</div>
+															</div>
 
-				        <div class="form-group ">
-                  <label class="  control-label" for="totp_code">TOTP Code</label>
-				            <div class="  controls">
+															<input type="submit" value="Submit" id="login_0"
+																class="btn btn-primary" />
 
-				                <input type="password" name="twoFactorAuthenticationCode" id="twoFactorAuthenticationCode" class="form-control" placeholder="Enter one-time code" />
-				            </div>
-				        </div>
+														</fieldset>
+													</form>
 
-				        <input type="submit" value="Submit" id="login_0" class="btn btn-primary" />
-
-				    </fieldset>
-				</form>
-
-				<script type="text/javascript">
-				    if (typeof jQuery != 'undefined') {
-				        if (typeof jQuery.fn.tooltip == 'function') {
-				            jQuery('i.s2b_tooltip').tooltip();
-				        }
-				    }
-				</script>
-
-
-                    <br/>
-                    <a href='/register'>Register a new account</a> <br/>
-                    <a href='/forgotpw'>Forgot password</a>
-                </div>
-            </div>
-         </div>
+													<script type="text/javascript">
+														if (typeof jQuery != 'undefined') {
+															if (typeof jQuery.fn.tooltip == 'function') {
+																jQuery('i.s2b_tooltip').tooltip();
+															}
+														}
+													</script>
 
 
-    </div></div></div>
-    <% include common/footer %>
+													<br />
+													<a href='/register'>Register a new account</a> <br />
+													<a href='/forgotpw'>Forgot password</a>
+												</div>
+												<h4>The Current Security Rating is <%= securityRating %>
+												</h4>
+												<h4>Change Security Rating</h4>
+												<% include common/ratingChooser %>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+		<% include common/footer %>
 </body>
+
 </html>

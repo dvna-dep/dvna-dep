@@ -15,4 +15,5 @@ module.exports = {
 	'ax_redirect': 0,
 	'register': 0,
 	'forgotpw': 0,
+	'login': 0
 }
