@@ -4,7 +4,7 @@ var TotpStrategy = require("passport-totp").Strategy;
 var bCrypt = require("bcrypt");
 var vh = require("./validationHandler");
 var authHandler = require("./authHandler.js");
-
+var base32 = require("thirty-two");
 const pwLength = "- Must contain at least 8 characters<br>";
 const pwLower = "- Must contain at least 1 lowercase letter<br>";
 const pwUpper = "- Must contain at least 1 uppercase letter<br>";
@@ -52,10 +52,11 @@ module.exports = function (passport) {
 
   passport.use(
     new TotpStrategy(function (user, done) {
-      var key = user.twoFactorAuthenticationCode;
+      var key = base32.decode(user.twoFactorAuthenticationCode);
       if (!key) {
         return done(new Error("No key"));
       } else {
+        console.log(key);
         return done(null, key, 30); //30 = valid key period
       }
     })
