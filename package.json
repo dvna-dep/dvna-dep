@@ -38,6 +38,7 @@
     "qrcode": "^1.4.4",
     "sequelize": "^4.13.10",
     "speakeasy": "^2.0.0",
+    "thirty-two": "^1.0.2",
     "validator": "13.6.0",
     "winston": "^3.0.0",
     "x-xss-protection": "^1.1.0"
