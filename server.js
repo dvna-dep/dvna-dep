@@ -1,11 +1,11 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var passport = require('passport')
-var session = require('express-session')
-var ejs = require('ejs')
-var morgan = require('morgan')
-const fileUpload = require('express-fileupload');
-var config = require('./config/server')
+var express = require("express");
+var bodyParser = require("body-parser");
+var passport = require("passport");
+var session = require("express-session");
+var ejs = require("ejs");
+var morgan = require("morgan");
+const fileUpload = require("express-fileupload");
+var config = require("./config/server");
 
 //Initialize Express
 var app = express()
@@ -17,22 +17,24 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(fileUpload());
 
 // Enable for Reverse proxy support
-// app.set('trust proxy', 1) 
+// app.set('trust proxy', 1)
 
 // Intialize Session
-app.use(session({
-  secret: 'config.sessionSecret',
-  resave: true,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}))
+app.use(
+  session({
+    secret: "config.sessionSecret",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
 
 // Initialize Passport
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Initialize express-flash
-app.use(require('express-flash')());
+app.use(require("express-flash")());
 
 // Routing
 app.use('/app', require('./routes/app')())
