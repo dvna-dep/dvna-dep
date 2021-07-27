@@ -37,28 +37,29 @@ function getTwoFactorAuthenticationCode() {
 
 function ensureTotp(req, res, next) {
   if (
-    (req.user.twoFactorAuthenticationCode && req.session.method == "totp") ||
+    (req.session.passedTotp && req.session.method == "totp") ||
     req.session.method == "plain"
   ) {
-    next();
+    return next();
   } else {
     res.redirect("/login");
   }
 }
 module.exports.ensureTotp = ensureTotp;
 
-function failedTotp(req, res, next) {
-  if (
-    req.user &&
-    !req.user.twoFactorAuthenticationCode &&
-    req.session.method == "totp"
-  ) {
-    res.redirect("/login");
+function loginGate(req, res, next) {
+  if (!req.isAuthenticated()) {
+    // failed passsword
+    return next();
+  }
+  if (req.isAuthenticated() && !req.session.passedTotp) {
+    // correct password, but failed totp
+    return next();
   } else {
-    next();
+    res.redirect("/learn");
   }
 }
-module.exports.failedTotp = failedTotp;
+module.exports.loginGate = loginGate;
 
 async function verifyTwoFactorAuthenticationCode(
   twoFactorAuthenticationCode,
