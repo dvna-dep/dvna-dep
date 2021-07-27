@@ -169,11 +169,7 @@ module.exports = function (passport) {
       res.redirect("/login");
     }
 
-    res.render("auth2fa", {
-      // TODO: take hidden inputs out of body
-      username: req.body.username,
-      password: req.body.password,
-    });
+    res.render("auth2fa");
   });
 
   router.post(
