@@ -14,21 +14,16 @@ module.exports = function (passport) {
     }
   );
 
-  router.get(
-    "/login",
-    // authHandler.failedTotp,
-    // authHandler.isNotAuthenticated,
-    function (req, res) {
-      var query_rating = req.query.securityRating
-        ? req.query.securityRating
-        : ratingState["login"];
-      ratingState["login"] = query_rating;
-      res.render("login", {
-        ratings: ratingsDict["login"],
-        securityRating: query_rating,
-      });
-    }
-  );
+  router.get("/login", authHandler.loginGate, function (req, res) {
+    var query_rating = req.query.securityRating
+      ? req.query.securityRating
+      : ratingState["login"];
+    ratingState["login"] = query_rating;
+    res.render("login", {
+      ratings: ratingsDict["login"],
+      securityRating: query_rating,
+    });
+  });
 
   router.get(
     "/learn/vulnerability/:vuln",
@@ -123,21 +118,6 @@ module.exports = function (passport) {
     }
   );
 
-  // router.post("/login", function (req, res) {
-  //   if (ratingState["login"] == 0) {
-  //     passport.authenticate("login", {
-  //       successRedirect: "/learn",
-  //       failureRedirect: "/login",
-  //       failureFlash: true,
-  //     })(req, res);
-  //   } else {
-  //     res.render("auth2fa", {
-  //       username: req.body.username,
-  //       password: req.body.password,
-  //     });
-  //   }
-  // });
-
   router.post("/register", function (req, res, next) {
     const rating = ratingState.register;
     const redirect = rating == 2 ? "/setup2fa" : "/learn";
@@ -201,17 +181,15 @@ module.exports = function (passport) {
     authHandler.isAuthenticated,
     passport.authenticate("totp", {
       failureRedirect: "/login",
-      successRedirect: "/learn",
-    })
+    }),
+    function (req, res) {
+      req.session.method = "totp";
+      req.session.passedTotp = true;
+      res.redirect("/learn");
+    }
   );
 
-  // router.post("/auth2fa", authHandler.isAuthenticated, function (req, res) {
-  //   passport.authenticate("login-2fa", {
-  //     successRedirect: "/learn",
-  //     failureRedirect: "/login",
-  //     failureFlash: true,
-  //   })(req, res);
-  // });
+  // utility routes for testing 2fa
   router.post("/2fa/generate", authHandler.generateTwoFactorAuthenticationCode);
 
   router.post("/2fa/turn-on", authHandler.turnOnTwoFactorAuthentication);
