@@ -16,8 +16,12 @@ const badPWmsg =
   "Bad Password:<br>" + pwLength + pwLower + pwUpper + pwNumber + pwSpec;
 
 // TFA code start
-//modeled after https://wanago.io/2019/07/22/nodejs-two-factor-authentication/
-//and https://github.com/auth0-blog/mfa-and-microservices-blog-samples/tree/master/twofa
+// sources:
+// https://wanago.io/2019/07/22/nodejs-two-factor-authentication/
+// https://github.com/auth0-blog/mfa-and-microservices-blog-samples/tree/master/twofa
+// https://auth0.com/blog/from-theory-to-practice-adding-two-factor-to-node-dot-js/
+// https://github.com/jaredhanson/passport-totp
+
 var speakeasy = require("speakeasy");
 var QRCode = require("qrcode");
 
@@ -33,7 +37,7 @@ function getTwoFactorAuthenticationCode() {
 
 function ensureTotp(req, res, next) {
   if (
-    (req.user.key && req.session.method == "totp") ||
+    (req.user.twoFactorAuthenticationCode && req.session.method == "totp") ||
     req.session.method == "plain"
   ) {
     next();
@@ -42,6 +46,19 @@ function ensureTotp(req, res, next) {
   }
 }
 module.exports.ensureTotp = ensureTotp;
+
+function failedTotp(req, res, next) {
+  if (
+    req.user &&
+    !req.user.twoFactorAuthenticationCode &&
+    req.session.method == "totp"
+  ) {
+    res.redirect("/login");
+  } else {
+    next();
+  }
+}
+module.exports.failedTotp = failedTotp;
 
 async function verifyTwoFactorAuthenticationCode(
   twoFactorAuthenticationCode,
