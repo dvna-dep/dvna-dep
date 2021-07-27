@@ -14,20 +14,26 @@ module.exports = function (passport) {
     }
   );
 
-  router.get("/login", authHandler.isNotAuthenticated, function (req, res) {
-    var query_rating = req.query.securityRating
-      ? req.query.securityRating
-      : ratingState["login"];
-    ratingState["login"] = query_rating;
-    res.render("login", {
-      ratings: ratingsDict["login"],
-      securityRating: query_rating,
-    });
-  });
+  router.get(
+    "/login",
+    // authHandler.failedTotp,
+    // authHandler.isNotAuthenticated,
+    function (req, res) {
+      var query_rating = req.query.securityRating
+        ? req.query.securityRating
+        : ratingState["login"];
+      ratingState["login"] = query_rating;
+      res.render("login", {
+        ratings: ratingsDict["login"],
+        securityRating: query_rating,
+      });
+    }
+  );
 
   router.get(
     "/learn/vulnerability/:vuln",
     authHandler.isAuthenticated,
+    authHandler.ensureTotp,
     function (req, res) {
       var query_rating = req.query.securityRating
         ? req.query.securityRating
@@ -60,9 +66,14 @@ module.exports = function (passport) {
     }
   );
 
-  router.get("/learn", authHandler.isAuthenticated, function (req, res) {
-    res.render("learn", { vulnerabilities: vulnDict });
-  });
+  router.get(
+    "/learn",
+    authHandler.isAuthenticated,
+    authHandler.ensureTotp,
+    function (req, res) {
+      res.render("learn", { vulnerabilities: vulnDict });
+    }
+  );
 
   router.get("/register", authHandler.isNotAuthenticated, function (req, res) {
     var query_rating = req.query.securityRating ? req.query.securityRating : 0;
@@ -190,7 +201,7 @@ module.exports = function (passport) {
     authHandler.isAuthenticated,
     passport.authenticate("totp", {
       failureRedirect: "/login",
-      successRedirect: "/setup2fa",
+      successRedirect: "/learn",
     })
   );
 
