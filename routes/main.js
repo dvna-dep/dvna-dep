@@ -64,6 +64,7 @@ module.exports = function (passport) {
 
   router.get("/register", authHandler.isNotAuthenticated, function (req, res) {
     var query_rating = req.query.securityRating ? req.query.securityRating : 0;
+    req.session.ratingState['register'] = query_rating;
     res.render("register", {
       ratings: ratingsDict["register"],
       securityRating: query_rating,
@@ -77,6 +78,7 @@ module.exports = function (passport) {
 
   router.get("/forgotpw", function (req, res) {
     var query_rating = req.query.securityRating ? req.query.securityRating : 0;
+    req.session.ratingState['forgotpw'] = query_rating;
     res.render("forgotpw", {
       ratings: ratingsDict["forgotpw"],
       securityRating: query_rating,
