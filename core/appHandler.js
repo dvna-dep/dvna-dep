@@ -20,8 +20,8 @@ const badPWmsg = "Bad Password:<br>" + pwLength + pwLower + pwUpper + pwNumber +
 
 
 module.exports.userSearch = function (req, res) {
-    
-	if(req.body.securityRating == '0') {
+
+	if (req.body.securityRating == '0') {
 		var query = "SELECT name,id FROM Users WHERE login='" + req.body.login + "'";
 		db.sequelize.query(query, {
 			model: db.User
@@ -51,10 +51,11 @@ module.exports.userSearch = function (req, res) {
 				output: null
 			})
 		})
-	} else if(req.body.securityRating == '1') {
+	} else if (req.body.securityRating == '1') {
 		// check input for allowed characters
-		if(vh.vWhitelist(req.body.login)) {
-			db.User.find({where:{'login':req.body.login}
+		if (vh.vWhitelist(req.body.login)) {
+			db.User.find({
+				where: { 'login': req.body.login }
 			}).then(user => {
 				if (user) {
 					var output = {
@@ -86,15 +87,15 @@ module.exports.userSearch = function (req, res) {
 			req.flash('danger', 'Input Validation Failed');
 			res.render('app/usersearch', {
 				securityRating: req.body.securityRating,
-				output:null
+				output: null
 			})
 		}
 	}
-	
+
 }
 
 module.exports.ping = function (req, res) {
-	if(req.body.securityRating == '0') {
+	if (req.body.securityRating == '0') {
 		exec('ping -c 2 ' + req.body.address, function (err, stdout, stderr) {
 			output = stdout + stderr
 			res.render('app/ping', {
@@ -102,14 +103,14 @@ module.exports.ping = function (req, res) {
 				output: output
 			})
 		})
-	} else if(req.body.securityRating == '1') { 
+	} else if (req.body.securityRating == '1') {
 		// check if input is a valid IP address or URL
-		if(vh.vIP(req.body.address) || vh.vUrl(req.body.address)) {
-			execFile('ping', ['-c', '2', req.body.address], function(err, stdout, stderr) {
+		if (vh.vIP(req.body.address) || vh.vUrl(req.body.address)) {
+			execFile('ping', ['-c', '2', req.body.address], function (err, stdout, stderr) {
 				output = stdout + stderr
 				res.render('app/ping', {
 					securityRating: req.body.securityRating,
-					output:output
+					output: output
 				})
 			})
 		} else {
@@ -118,7 +119,7 @@ module.exports.ping = function (req, res) {
 				output: "Input Validation Failed"
 			})
 		}
-	
+
 
 	}
 }
@@ -204,7 +205,7 @@ module.exports.modifyProductSubmit = function (req, res) {
 			output = {
 				product: product
 			}
-			req.flash('danger',err)
+			req.flash('danger', err)
 			res.render('app/modifyproduct', {
 				output: output
 			})
@@ -228,15 +229,15 @@ module.exports.userEditSubmit = function (req, res) {
 	userEditSubmitCheckA5SecurityRating(req, res)
 }
 
-function userEditSubmitCheckA5SecurityRating(req, res){
-	if(ratingState['a5_broken_access_control'] == 0)
+function userEditSubmitCheckA5SecurityRating(req, res) {
+	if (ratingState['a5_broken_access_control'] == 0)
 		editUserInfo(req, res);
 	else
 		editUserInfoSecurely(req, res);
 }
 
-function editUserInfoSecurely(req, res){
-	if(req.user.id == req.body.id){
+function editUserInfoSecurely(req, res) {
+	if (req.user.id == req.body.id) {
 		editUserInfo(req, res)
 	} else {
 		userEditMSGandRender(req, res, true, 'warning', 'Invalid Request to Edit User Data')
@@ -244,25 +245,25 @@ function editUserInfoSecurely(req, res){
 	return
 }
 
-function editUserInfo(req, res){
+function editUserInfo(req, res) {
 	db.User.find({
 		where: {
 			'id': req.body.id
-		}		
-	}).then(user =>{
+		}
+	}).then(user => {
 		validateUserInfo(user, req, res)
 	})
 }
 
-function validateUserInfo(user, req, res){
-	if(ratingState['a2_broken_auth'] == 0)
+function validateUserInfo(user, req, res) {
+	if (ratingState['a2_broken_auth'] == 0)
 		changeUserInfoWithoutValidation(user, req, res)
 	else
 		changeUserInfoWithValidation(user, req, res)
 }
 
-function changeUserInfoWithoutValidation(user, req, res){
-	if(req.body.password.length>0)
+function changeUserInfoWithoutValidation(user, req, res) {
+	if (req.body.password.length > 0)
 		changePW(user, req, res)
 	user.name = req.body.name
 	user.email = req.body.email
@@ -271,49 +272,49 @@ function changeUserInfoWithoutValidation(user, req, res){
 	})
 }
 
-function changeUserInfoWithValidation(user, req, res){
-	if(req.body.password.length>0){
-		if(vh.vPassword(req.body.password)){
+function changeUserInfoWithValidation(user, req, res) {
+	if (req.body.password.length > 0) {
+		if (vh.vPassword(req.body.password)) {
 			changePW(user, req, res)
 		}
-		else{
+		else {
 			userEditMSGandRender(req, res, true, 'warning', badPWmsg)
 			return
 		}
 	}
-	user.name = (req.body.name.length > 0) ? user.name = req.body.name : user.name = user.name; 
-	if (req.body.email.length > 0){
-		if(vh.vEmail(req.body.email)){
+	user.name = (req.body.name.length > 0) ? user.name = req.body.name : user.name = user.name;
+	if (req.body.email.length > 0) {
+		if (vh.vEmail(req.body.email)) {
 			user.email = req.body.email
 		} else {
 			userEditMSGandRender(req, res, true, 'warning', 'Invalid Email')
 			return
 		}
-	} else{
-		user.name = user.name				
+	} else {
+		user.name = user.name
 	}
 	user.save().then(function () {
 		userEditMSGandRender(req, res, true, 'success', 'Updated successfully')
 	})
 }
 
-function changePW(user, req, res){
-	if(req.body.password.length>0){
+function changePW(user, req, res) {
+	if (req.body.password.length > 0) {
 		if (req.body.password == req.body.cpassword) {
 			user.password = bCrypt.hashSync(req.body.password, bCrypt.genSaltSync(10), null)
-		}else{
+		} else {
 			userEditMSGandRender(req, res, true, 'warning', 'Passwords dont match')
-			return		
+			return
 		}
-	}else{
+	} else {
 		userEditMSGandRender(req, res, true, 'warning', 'Invalid Password')
 		return
 	}
 }
 
-function userEditMSGandRender(req, res, flashBool, flashType, flashMSG){
-	if(flashBool == true){
-		req.flash(flashType,flashMSG)
+function userEditMSGandRender(req, res, flashBool, flashType, flashMSG) {
+	if (flashBool == true) {
+		req.flash(flashType, flashMSG)
 	}
 	res.render('app/useredit', {
 		vuln5: 'a5_broken_access_control',
@@ -334,7 +335,16 @@ module.exports.redirect = function (req, res) {
 	}
 }
 
+// A6 Security Misconfiguration
 module.exports.calc = function (req, res) {
+	if (ratingState['a6_sec_misconf'] == 0) {
+		calcRating0(req, res);
+	} else {
+		calcRating1(req, res)
+	}
+}
+
+function calcRating0(req, res) {
 	if (req.body.eqn) {
 		res.render('app/calc', {
 			output: mathjs.eval(req.body.eqn)
@@ -346,9 +356,26 @@ module.exports.calc = function (req, res) {
 	}
 }
 
+function calcRating1(req, res) {
+	if (req.body.eqn) {
+		try {
+			result = mathjs.eval(req.body.eqn)
+		} catch (err) {
+			result = 'Invalid Equation'
+		};
+		res.render('app/calc', {
+			output: result
+		})
+	} else {
+		res.render('app/calc', {
+			output: 'Enter a valid math string like (3+3)*2'
+		})
+	}
+}
+
 
 // --- A3 Sensitive Data Exposure ---
-function listUsersAPIRating0(res){ 
+function listUsersAPIRating0(res) {
 	return db.User.findAll({}).then(users => {
 		res.status(200).json({
 			success: true,
@@ -358,29 +385,29 @@ function listUsersAPIRating0(res){
 }
 function listUsersAPIRating1(res) {
 	return db.User.findAll({ attributes: ['id', 'name', 'email'] },)
-	.then(users => {
-		res.status(200).json({
-			success: true,
-			users: users
-		})
-	});
+		.then(users => {
+			res.status(200).json({
+				success: true,
+				users: users
+			})
+		});
 }
 
 module.exports.listUsersAPI = function (req, res) {
 	var vulnKey = 'a3_sensitive_data';
 	securityRating = ratingState[vulnKey]
-	if (securityRating == 0 ){
+	if (securityRating == 0) {
 		listUsersAPIRating0(res);
 	} else if (securityRating == 1) {
 		listUsersAPIRating1(res);
 	};
 }
 
-module.exports.bulkProductsLegacy = function (req,res){
+module.exports.bulkProductsLegacy = function (req, res) {
 	// TODO: Deprecate this soon
-	if(req.files.products){
+	if (req.files.products) {
 		var products = serialize.unserialize(req.files.products.data.toString('utf8'))
-		products.forEach( function (product) {
+		products.forEach(function (product) {
 			var newProduct = new db.Product()
 			newProduct.name = product.name
 			newProduct.code = product.code
@@ -389,15 +416,15 @@ module.exports.bulkProductsLegacy = function (req,res){
 			newProduct.save()
 		})
 		res.redirect('/app/products')
-	}else{
-		res.render('app/bulkproducts',{messages:{danger:'Invalid file'},legacy:true})
+	} else {
+		res.render('app/bulkproducts', { messages: { danger: 'Invalid file' }, legacy: true })
 	}
 }
 
-module.exports.bulkProducts =  function(req, res) {
-	if (req.files.products && req.files.products.mimetype=='text/xml'){
-		var products = libxmljs.parseXmlString(req.files.products.data.toString('utf8'), {noent:true,noblanks:true})
-		products.root().childNodes().forEach( product => {
+module.exports.bulkProducts = function (req, res) {
+	if (req.files.products && req.files.products.mimetype == 'text/xml') {
+		var products = libxmljs.parseXmlString(req.files.products.data.toString('utf8'), { noent: true, noblanks: true })
+		products.root().childNodes().forEach(product => {
 			var newProduct = new db.Product()
 			newProduct.name = product.childNodes()[0].text()
 			newProduct.code = product.childNodes()[1].text()
@@ -406,7 +433,7 @@ module.exports.bulkProducts =  function(req, res) {
 			newProduct.save()
 		})
 		res.redirect('/app/products')
-	}else{
-		res.render('app/bulkproducts',{messages:{danger:'Invalid file'},legacy:false})
+	} else {
+		res.render('app/bulkproducts', { messages: { danger: 'Invalid file' }, legacy: false })
 	}
 }
