@@ -11,7 +11,7 @@ var config = require('./config/server')
 var app = express()
 require('./core/passport')(passport)
 app.use(express.static('public'))
-app.set('view engine','ejs')
+app.set('view engine', 'ejs')
 app.use(morgan('tiny'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(fileUpload());
@@ -35,8 +35,16 @@ app.use(passport.session())
 app.use(require('express-flash')());
 
 // Routing
-app.use('/app',require('./routes/app')())
-app.use('/',require('./routes/main')(passport))
+app.use('/app', require('./routes/app')())
+app.use('/', require('./routes/main')(passport))
 
 // Start Server
 app.listen(config.port, config.listen)
+
+// Fix for A6 Security Misconfiguration:
+// Use Helmet to make your Express headings more secure. 
+// Helmet will disable the X-Powered-By header. 
+// See https://expressjs.com/en/advanced/best-practice-security.html
+
+// var helmet = require('helmet')
+// app.use(helmet())
