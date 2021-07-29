@@ -5,7 +5,7 @@ var vh = require("./validationHandler");
 var cryptoRandomString = require("crypto-random-string");
 var s512 = require("hash.js/lib/hash/sha/512");
 var coolDownTime = 5 * 60 * 1000; // 5 mins
-var initialRatingState = require("../config/ratingState");
+const ratings = require('../config/ratings');
 
 const pwLength = "- Must contain at least 8 characters<br>";
 const pwLower = "- Must contain at least 1 lowercase letter<br>";
@@ -33,6 +33,10 @@ module.exports.isAdmin = function (req, res, next) {
 };
 
 module.exports.initializeRatingState = function (req, res, next) {
+  var initialRatingState = {};
+  Object.keys(ratings).forEach(rating => {
+    initialRatingState[rating] = 0
+  });
   if (req.session && !req.session.ratingState) {
     req.session.ratingState = initialRatingState;
     return next();
@@ -74,12 +78,12 @@ module.exports.forgotPw = function (req, res) {
           req.flash(
             "info",
             "Email has been sent < http://127.0.0.1:9090/resetpw?login=" +
-              req.body.login +
-              "&token=" +
-              md5token +
-              "&securityRating=" +
-              req.body.securityRating +
-              " >"
+            req.body.login +
+            "&token=" +
+            md5token +
+            "&securityRating=" +
+            req.body.securityRating +
+            " >"
           );
           res.redirect("/login");
         } else if (req.body.securityRating == "1") {
@@ -105,13 +109,13 @@ module.exports.forgotPw = function (req, res) {
               req.flash(
                 "info",
                 "If account exists, you will get an email on the registered email" +
-                  "< http://127.0.0.1:9090/resetpw?login=" +
-                  req.body.login +
-                  "&token=" +
-                  token +
-                  "&securityRating=" +
-                  req.body.securityRating +
-                  " >"
+                "< http://127.0.0.1:9090/resetpw?login=" +
+                req.body.login +
+                "&token=" +
+                token +
+                "&securityRating=" +
+                req.body.securityRating +
+                " >"
               );
               res.redirect("/login");
             } else {
@@ -241,10 +245,10 @@ module.exports.resetPwSubmit = function (req, res) {
                 req.flash(
                   "success",
                   "Passowrd successfully reset <login: " +
-                    req.body.login +
-                    " // pw: " +
-                    req.body.password +
-                    ">"
+                  req.body.login +
+                  " // pw: " +
+                  req.body.password +
+                  ">"
                 );
                 res.redirect("/login");
               });
@@ -298,10 +302,10 @@ module.exports.resetPwSubmit = function (req, res) {
                 req.flash(
                   "success",
                   "Password successfuly changed <login: " +
-                    req.body.login +
-                    " // new pw: " +
-                    req.body.password +
-                    ">"
+                  req.body.login +
+                  " // new pw: " +
+                  req.body.password +
+                  ">"
                 );
                 res.redirect("/login");
               } else if (resetpass) {
