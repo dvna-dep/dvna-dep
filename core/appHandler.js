@@ -344,7 +344,7 @@ module.exports.redirect = function (req, res) {
 
 // A6 Security Misconfiguration
 module.exports.calc = function (req, res) {
-  if (ratingState['a6_sec_misconf'] == 0) {
+  if (req.session.ratingState['a6_sec_misconf'] == 0) {
     calcRating0(req, res);
   } else {
     calcRating1(req, res)
@@ -401,8 +401,7 @@ function listUsersAPIRating1(res) {
 }
 
 module.exports.listUsersAPI = function (req, res) {
-  var vulnKey = 'a3_sensitive_data';
-  securityRating = ratingState[vulnKey]
+  var securityRating = req.session.ratingState['a3_sensitive_data']
   if (securityRating == 0) {
     listUsersAPIRating0(res);
   } else if (securityRating == 1) {
