@@ -3,43 +3,44 @@ var appHandler = require("../core/appHandler");
 var authHandler = require("../core/authHandler");
 
 module.exports = function () {
-  router.get("/", authHandler.isAuthenticated, function (req, res) {
+  router.get("/", authHandler.isAuthenticated, authHandler.initializeRatingState, function (req, res) {
     res.redirect("/learn");
   });
 
-  router.get("/usersearch", authHandler.isAuthenticated, function (req, res) {
+  router.get("/usersearch", authHandler.isAuthenticated, authHandler.initializeRatingState, function (req, res) {
     res.render("app/usersearch", {
       output: null,
       securityRating: req.query.securityRating,
     });
   });
 
-  router.get("/ping", authHandler.isAuthenticated, function (req, res) {
+  router.get("/ping", authHandler.isAuthenticated, authHandler.initializeRatingState, function (req, res) {
     res.render("app/ping", {
       output: null,
       securityRating: req.query.securityRating,
     });
   });
 
-  router.get("/bulkproducts", authHandler.isAuthenticated, function (req, res) {
+  router.get("/bulkproducts", authHandler.isAuthenticated, authHandler.initializeRatingState, function (req, res) {
     res.render("app/bulkproducts", { legacy: req.query.legacy });
   });
 
-  router.get("/products", authHandler.isAuthenticated, appHandler.listProducts);
+  router.get("/products", authHandler.isAuthenticated, authHandler.initializeRatingState, appHandler.listProducts);
 
   router.get(
     "/modifyproduct",
     authHandler.isAuthenticated,
+    authHandler.initializeRatingState,
     appHandler.modifyProduct
   );
 
-  router.get("/useredit", authHandler.isAuthenticated, appHandler.userEdit);
+  router.get("/useredit", authHandler.isAuthenticated, authHandler.initializeRatingState, appHandler.userEdit);
 
-  router.get("/calc", authHandler.isAuthenticated, function (req, res) {
+  router.get("/calc", authHandler.isAuthenticated, authHandler.initializeRatingState, function (req, res) {
     res.render("app/calc", { output: null });
   });
 
-  router.get("/admin", authHandler.isAuthenticated, function (req, res) {
+  router.get("/admin", authHandler.isAuthenticated, authHandler.initializeRatingState, function (req, res) {
     var globalRating = req.session.ratingState[req.query.vuln];
     res.render("app/admin", {
       admin: req.user.role == "admin",
@@ -51,6 +52,7 @@ module.exports = function () {
   router.get(
     "/admin/usersapi/",
     authHandler.isAuthenticated,
+    authHandler.initializeRatingState,
     authHandler.isAdmin,
     appHandler.listUsersAPI
   );
@@ -58,6 +60,7 @@ module.exports = function () {
   router.get(
     "/admin/users/",
     authHandler.isAuthenticated,
+    authHandler.initializeRatingState,
     authHandler.isAdmin,
     function (req, res) {
       vuln3 = "a3_sensitive_data";
@@ -77,6 +80,7 @@ module.exports = function () {
   router.get(
     "/admin/users/toggle",
     authHandler.isAuthenticated,
+    authHandler.initializeRatingState,
     function (req, res) {
       if (req.session.ratingState[req.query.vuln] == 1)
         req.session.ratingState[req.query.vuln] = 0;
@@ -88,6 +92,7 @@ module.exports = function () {
   router.get(
     "/admin/toggle/a5",
     authHandler.isAuthenticated,
+    authHandler.initializeRatingState,
     function (req, res) {
       if (req.session.ratingState["a5_broken_access_control"] == 1)
         req.session.ratingState["a5_broken_access_control"] = 0;
@@ -131,6 +136,7 @@ module.exports = function () {
   router.get(
     "/useredit/toggle",
     authHandler.isAuthenticated,
+    authHandler.initializeRatingState,
     function (req, res) {
       if (req.session.ratingState[req.query.vuln] == 1)
         req.session.ratingState[req.query.vuln] = 0;
