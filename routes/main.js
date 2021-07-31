@@ -13,7 +13,7 @@ module.exports = function (passport) {
     }
   );
 
-  router.get("/login", authHandler.isNotAuthenticated, function (req, res) {
+  router.get("/login", authHandler.isNotAuthenticated, authHandler.initializeRatingState, function (req, res) {
     res.render("login");
   });
 
@@ -62,7 +62,7 @@ module.exports = function (passport) {
     }
   );
 
-  router.get("/register", authHandler.isNotAuthenticated, function (req, res) {
+  router.get("/register", authHandler.isNotAuthenticated, authHandler.initializeRatingState, function (req, res) {
     var query_rating = req.query.securityRating ? req.query.securityRating : 0;
     req.session.ratingState['register'] = query_rating;
     res.render("register", {
@@ -77,7 +77,7 @@ module.exports = function (passport) {
     res.redirect("/");
   });
 
-  router.get("/forgotpw", function (req, res) {
+  router.get("/forgotpw", authHandler.initializeRatingState, function (req, res) {
     var query_rating = req.query.securityRating ? req.query.securityRating : 0;
     req.session.ratingState['forgotpw'] = query_rating;
     res.render("forgotpw", {
@@ -86,10 +86,10 @@ module.exports = function (passport) {
     });
   });
 
-  router.get("/resetpw", authHandler.resetPw);
+  router.get("/resetpw", authHandler.initializeRatingState, authHandler.resetPw);
 
   router.post(
-    "/login",
+    "/login", authHandler.initializeRatingState, 
     passport.authenticate("login", {
       successRedirect: "/learn",
       failureRedirect: "/login",
@@ -97,7 +97,7 @@ module.exports = function (passport) {
     })
   );
 
-  router.post("/register", function (req, res, next) {
+  router.post("/register", authHandler.initializeRatingState, function (req, res, next) {
     passport.authenticate("signup", {
       successRedirect: "/learn",
       failureRedirect: "/register?securityRating=" + req.body.securityRating,
@@ -105,9 +105,9 @@ module.exports = function (passport) {
     })(req, res, next);
   });
 
-  router.post("/forgotpw", authHandler.forgotPw);
+  router.post("/forgotpw", authHandler.initializeRatingState, authHandler.forgotPw);
 
-  router.post("/resetpw", authHandler.resetPwSubmit, function (req, res) {
+  router.post("/resetpw", authHandler.initializeRatingState, authHandler.resetPwSubmit, function (req, res) {
     res.render("resetpw", {
       login: req.login,
       token: req.token,

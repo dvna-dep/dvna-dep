@@ -109,27 +109,27 @@ module.exports = function () {
 
   router.post(
     "/usersearch",
-    authHandler.isAuthenticated,
+    authHandler.isAuthenticated, authHandler.initializeRatingState,
     appHandler.userSearch
   );
 
-  router.post("/ping", authHandler.isAuthenticated, appHandler.ping);
+  router.post("/ping", authHandler.isAuthenticated, authHandler.initializeRatingState, appHandler.ping);
 
   router.post(
     "/products",
-    authHandler.isAuthenticated,
+    authHandler.isAuthenticated, authHandler.initializeRatingState, 
     appHandler.productSearch
   );
 
   router.post(
     "/modifyproduct",
-    authHandler.isAuthenticated,
+    authHandler.isAuthenticated, authHandler.initializeRatingState, 
     appHandler.modifyProductSubmit
   );
 
   router.post(
     "/useredit",
-    authHandler.isAuthenticated,
+    authHandler.isAuthenticated, authHandler.initializeRatingState, 
     appHandler.userEditSubmit
   );
 
@@ -145,17 +145,17 @@ module.exports = function () {
     }
   );
 
-  router.post("/calc", authHandler.isAuthenticated, appHandler.calc);
+  router.post("/calc", authHandler.isAuthenticated, authHandler.initializeRatingState, appHandler.calc);
 
   router.post(
     "/bulkproducts",
-    authHandler.isAuthenticated,
+    authHandler.isAuthenticated, authHandler.initializeRatingState, 
     appHandler.bulkProducts
   );
 
   router.post(
     "/bulkproductslegacy",
-    authHandler.isAuthenticated,
+    authHandler.isAuthenticated, authHandler.initializeRatingState, 
     appHandler.bulkProductsLegacy
   );
 
