@@ -16,8 +16,19 @@ services:
       - ./vars.env
 
   mysql-db:
-    image: mysql:5.7
+    image: mariadb:10.5.8
     expose:
       - "3306"
     env_file:
       - ./vars.env
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    environment:
+     - PMA_ARBITRARY=1
+    restart: always
+    ports:
+     - 8080:80
+
+
