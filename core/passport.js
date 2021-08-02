@@ -15,6 +15,8 @@ const badPWmsg = "Bad Password:<br>" + pwLength + pwLower + pwUpper + pwNumber +
 // array for names of password hash types
 const hashTypes = ["MD5", "SHA-1", "SHA-256", "SHA-512", "bCrypt"];
 
+const SALT_LENGTH = 32; //salt length in bytes 
+
 module.exports = function (passport) {
 
     passport.serializeUser(function (user, done) {
@@ -58,6 +60,9 @@ module.exports = function (passport) {
 
     // hash login password and compare to stored password hash
     var isValidPassword = function (user, password) {
+        if (user.salt){
+            password += user.salt; 
+        };
         switch(user.hashtype) {
             case "MD5": 
                 return crypto.createHash('md5').update(password).digest('hex') === user.password;
@@ -72,8 +77,6 @@ module.exports = function (passport) {
         }
     }
     
-    
-
     passport.use('signup', new LocalStrategy({
             passReqToCallback: true
         },
@@ -87,48 +90,36 @@ module.exports = function (passport) {
                     if (user) {
                         return done(null, false, req.flash('danger', 'Account Already Exists'));
                     } else {
-                        if(req.body.securityRating == 0){
-                            if (req.body.email && req.body.password && req.body.username && req.body.cpassword && req.body.name && req.body.pwLevel) {
-                                if (req.body.cpassword == req.body.password) {
-                                    db.User.create({
-                                        email: req.body.email,
-                                        password: createHash(password, req.body.pwLevel),
-                                        name: req.body.name,
-                                        login: username,
-                                        hashtype: hashTypes[req.body.pwLevel]
-                                    }).then(function (user) {
-                                        return done(null, user)
-                                    })
-                                } else {
-                                    return done(null, false, req.flash('danger', 'Passwords do not match'));
-                                }
-                            } else {
-                                return done(null, false, req.flash('danger', 'Input field(s) missing'));
-                            }   
-                        } else if(req.body.securityRating == 1){
+                        if(req.body.securityRating == 1){ // Level 1: validate input
                             if(!vh.vEmail(req.body.email)){
                                 return done(null, false, req.flash('danger', 'Invalid Email'));
-                            }
+                            };
                             if(!vh.vPassword(req.body.password)){
                                 return done(null, false, req.flash('danger', badPWmsg));
-                            }
-                            if (req.body.email && req.body.password && req.body.username && req.body.cpassword && req.body.name && req.body.pwLevel) {
-                                if (req.body.cpassword == req.body.password) {
-                                    db.User.create({
-                                        email: req.body.email,
-                                        password: createHash(password, req.body.pwLevel),
-                                        name: req.body.name,
-                                        login: username,
-                                        hashtype: hashTypes[req.body.pwLevel]
-                                    }).then(function (user) {
-                                        return done(null, user)
-                                    })
-                                } else {
-                                    return done(null, false, req.flash('danger', 'Passwords do not match'));
-                                }
+                            };
+                        };
+                        if (req.body.email && req.body.password && req.body.username && req.body.cpassword && req.body.name && req.body.pwLevel) {
+                            if (req.body.cpassword == req.body.password) {
+                                var saltStr = '';
+                                if (req.body.salt == 'true'){
+                                    saltStr = genRandomString(SALT_LENGTH);
+                                    password += saltStr; 
+                                };
+                                db.User.create({
+                                    email: req.body.email,
+                                    password: createHash(password, req.body.pwLevel),
+                                    name: req.body.name,
+                                    login: username,
+                                    hashtype: hashTypes[req.body.pwLevel],
+                                    salt: saltStr
+                                }).then(function (user) {
+                                    return done(null, user)
+                                })
                             } else {
-                                return done(null, false, req.flash('danger', 'Input field(s) missing'));
+                                return done(null, false, req.flash('danger', 'Passwords do not match'));
                             }
+                        } else {
+                            return done(null, false, req.flash('danger', 'Input field(s) missing'));
                         }
                     }
                 });
@@ -151,5 +142,18 @@ module.exports = function (passport) {
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
         }
     }
+
+    // salt generation function, from 
+    // https://ciphertrick.com/salt-hash-passwords-using-nodejs-crypto/
+    /**
+     * generates random string of characters i.e salt
+     * @function
+     * @param {number} length - Length of the random string.
+     */
+    var genRandomString = function (length){
+        return crypto.randomBytes(Math.ceil(length/2))
+                .toString('hex') /** convert to hexadecimal format */
+                .slice(0,length);   /** return required number of characters */
+    };
 
 }

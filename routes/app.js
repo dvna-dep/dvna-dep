@@ -159,5 +159,7 @@ module.exports = function () {
     appHandler.bulkProductsLegacy
   );
 
+  router.get('/reset-db', appHandler.resetdb);
+
   return router;
 };

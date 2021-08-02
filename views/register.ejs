@@ -73,13 +73,20 @@
                                 <div class="  controls">
                                     <select class="selectHash" data-style="btn-info" name="pwLevel">
                                         <optgroup label="Choose Hash">
-                                            <option name="" value="4">bCrypt</option>
+                                            <option name="" value="4">bCrypt (includes a salt by default)</option>
                                             <option name="" value="3">SHA512</option>
                                             <option name="" value="2">SHA256</option>
                                             <option name="" value="1">SHA1</option>
                                             <option name="" value="0">MD5</option>
                                         </optgroup>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="form-check form-switch form-group">
+                                <div class=" controls">
+                                    <input class="form-check-input" type="checkbox" id="saltSwitch" name="salt" value=true>
+                                    <label class="control-label form-check-label" for="saltSwitch">Add Salt</label>
                                 </div>
                             </div>
 
