@@ -19,7 +19,7 @@
                     <div id='admin-body' class='page-body'>
                         <!-- IF YOU CAN SEE THIS BELOW LINK, YOU DISCOVERED THE VULNERABILITY AT A5 SECURITY RATING 0 -->
                         <!-- (BELOW LINK LEADS TO ADMIN ONLY PAGE, WHICH LEADS TO AN ADMIN API ENDPOINT) -->
-                        <a href=<%='http://localhost:9090/app/admin/users?vuln=' + vuln %>>Admin Only Link to See List of Users</a><br>                 
+                        <a href=<%='/app/admin/users?vuln=' + vuln %>>Admin Only Link to See List of Users</a><br>                 
                     </div>
                     <div id='user-body' class='page-body'>
                         You are not an Admin ... but you should be able to see something hidden using an inspector<br>
@@ -28,7 +28,7 @@
                 <% if(securityRating == 1){%>
                     <% if(admin) { %>
                         <div id='admin-body' class='page-body'>
-                            <a href=<%='http://localhost:9090/app/admin/users?vuln=' + vuln %>>Admin Only Link to See List of Users</a><br>                 
+                            <a href=<%='/app/admin/users?vuln=' + vuln %>>Admin Only Link to See List of Users</a><br>                 
                         </div>
                         <% } else { %>
                         <div id='user-body' class='page-body'>
