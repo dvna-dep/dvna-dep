@@ -7,17 +7,38 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/"><i class='fa fa-bug'></i> DVNA-DEP: Damn Vulnerable NodeJS Application by Dan, Elaine, and Patrick</a>
+      <a class="navbar-brand" href="/"><i class='fa fa-user-secret'></i> DVNA-DEP</a>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class='nav navbar-nav navbar-right'>
-          <% if(messages.authenticated){ %>
-          <li>
-              <a href='/logout'>
-                  <i class='fa fa-sign-out'></i> Logout
-              </a>
-          </li>
-          <% } %>
+          <ul class='nav navbar-nav navbar-right'>
+              <% if(messages.authenticated){ %>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">OWASP Top 10 <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="/learn">Home Page</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/learn/vulnerability/a1_injection">A1: Injection (DVNA-DEP expanded)</a></li>
+                    <li><a href="/learn/vulnerability/a2_broken_auth">A2: Broken Authentication (DVNA-DEP expanded)</a></li>
+                    <li><a href="/learn/vulnerability/a3_sensitive_data">A3: Sensitive Data Exposure (DVNA-DEP expanded)</a></li>
+                    <li><a href="/learn/vulnerability/a4_xxe">A4: XML External Entities (DVNA-DEP expanded)</a></li>
+                    <li><a href="/learn/vulnerability/a5_broken_access_control">A5: Broken Access Control (DVNA-DEP expanded)</a></li>
+                    <li><a href="/learn/vulnerability/a6_sec_misconf">A6: Security Misconfiguration (DVNA-DEP expanded)</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/learn/vulnerability/a7_xss">A7: Cross-site Scripting</a></li>
+                    <li><a href="/learn/vulnerability/a8_ides">A8: Insecure Deserialization</a></li>
+                    <li><a href="/learn/vulnerability/a9_vuln_component">A9: Using Components with Known Vulnerabilities</a></li>
+                    <li><a href="/learn/vulnerability/a10_logging">A10: Insufficient Logging and Monitoring </a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="/learn/vulnerability/ax_csrf">A8:2013 Cross-site Request Foregery</a></li>
+                    <li><a href="/learn/vulnerability/ax_redirect">A10:2013 Unvalidated Redirects and Forwards</a></li>
+                  </ul>
+                </li>
+              <li>
+                  <a href='/logout'>
+                      <i class='fa fa-sign-out'></i> Logout
+                  </a>
+              </li>
+              <% } %>
+          </ul>
       </ul>
     </div>
   </div>
