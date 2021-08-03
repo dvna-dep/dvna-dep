@@ -1,28 +1,33 @@
-<form>
-    <div class="form-check row">
-        <% for (var rating in ratings) { %>
-            <span class="col-sm-2">
-                <input class="form-check-input" type="radio" name="securityRating" id=<%="rating" + rating %> value=
-                <%=rating%> >
-                    <label class="form-check-label" for=<%="rating" + rating %>>
-                        <%= "Level " + rating %>
-                    </label>
-            </span>
-            <% } %>
+<% if (securityRating == null) { %>
+    <div class='markdown'>
+        Note:  
+        As of this date, we have not expanded on "<%=vuln_title%>" section.
+        As such, the Security Rating toggle feature is not available for this section (i.e., page).  
+        You may treat this section as if it were at Security Rating 0 (i.e., vulnerable). 
+        This section is exactly the same as found in the original Appsecco DVNA.
     </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
-</form>
-<script>
-    // get security level from query params
-    document.addEventListener('DOMContentLoaded', (event) => {
-        var params = new URLSearchParams(window.location.search);
-        var securityRating = 0;
-        if (params.get("securityRating")) {
-            securityRating = params.get("securityRating");
-        };
-        checked_input = document.getElementById("rating" + securityRating);
-        checked_input.setAttribute("checked", '');
-    });
-</script>
+<% } else {%> 
+    <form>
+        <div class="form-check row">
+            <% for (var rating in ratings) { %>
+                    <button class=
+                    <% if (securityRating == rating) { %>
+                        "btn btn-success active" 
+    
+                        <% } else {%> 
+                        "btn btn-default active" 
+                    <% } %>                             
+                    type="submit" name="securityRating" id=<%="rating" + rating %> value=
+                    <%=rating%> ><%= "Security Rating " + rating %></button>
+                <% } %>
+        </div>
+    </form>    
+<% } %>
+
+
+
+
+
+
+
+
