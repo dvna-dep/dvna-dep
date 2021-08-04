@@ -105,6 +105,23 @@ module.exports = function (passport) {
     })(req, res, next);
   });
 
+  router.get("/createAdmin", authHandler.isNotAuthenticated, authHandler.initializeRatingState, function (req, res) {
+    var query_rating = req.query.securityRating ? req.query.securityRating : 0;
+    req.session.ratingState['register'] = query_rating;
+    res.render("registerAdmin", {
+      ratings: ratingsDict["register"],
+      securityRating: query_rating,
+    });
+  });
+
+  router.post("/createAdmin", authHandler.initializeRatingState, function (req, res, next) {
+    passport.authenticate("signupadmin", {
+      successRedirect: "/learn",
+      failureRedirect: "/register?securityRating=" + req.body.securityRating,
+      failureFlash: true,
+    })(req, res, next);
+  });
+
   router.post("/forgotpw", authHandler.initializeRatingState, authHandler.forgotPw);
 
   router.post("/resetpw", authHandler.initializeRatingState, authHandler.resetPwSubmit, function (req, res) {
