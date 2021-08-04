@@ -1,5 +1,12 @@
-<div class='markdown'>
+-------------------------------------------------------------------------------------------------------------
+<div class="row">
+    <div class="col-md-12">
+        <a href="https://app.gitbook.com/@dvna-dep/s/dvna-dep/vulnerabilities/a1-injection" target="_blank" rel="noopener noreferrer"><img src="/assets/images/gitbook_logo.png" style="width:60px;height:15px;">  DVNA-DEP Security Guide for <%=vuln_title%></a>       
+    </div>
+</div>
+-------------------------------------------------------------------------------------------------------------
 
+<div class='markdown'>
 Injection flaws occur when an application sends untrusted data to an interpreter. Injection flaws are very prevalent, particularly in legacy code. They are often found in SQL, LDAP, Xpath, or NoSQL queries; OS commands; XML parsers, SMTP Headers, program arguments, etc. Injection flaws are easy to discover when examining code, but frequently hard to discover via testing. Scanners and fuzzers can help attackers find injection flaws.
 
 **Example Scenario**: The application uses untrusted data in the construction of the following vulnerable SQL call:

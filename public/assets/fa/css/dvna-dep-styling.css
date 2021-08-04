@@ -1,0 +1,50 @@
+/* table {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+    width: 60%;
+}
+
+td, th {
+    padding: 2px;
+    text-align: left;
+    border: 1px solid black;
+}
+
+td:hover {
+    background-color: gray;
+}
+
+th {
+    background-color: lightblue;
+}
+
+.form-check row{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: red;
+}
+
+h1{
+    color: red;
+}
+
+h2{
+    color: blue;
+}
+
+h3{
+    color: red;
+} */
+
+#vuln_subheader{
+    text-shadow: 1px 0 #888888;
+    font:bold;
+    font:x-large
+}
+
+#sc_indicator1 {
+    color:orange;
+}
+

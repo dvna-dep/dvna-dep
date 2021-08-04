@@ -29,20 +29,25 @@
             </div>
         </div>
         <div class='col-md-9'>
-                <h3><%=vuln_title%></h3>
-                <h4>Scenario</h4>
-                <div> 
-                    The security rating for this scenario is at Level <%= securityRating %>. 
-                </div>
+                <h3><strong><%=vuln_title%></strong></h3>
+                <h4 id='vuln_subheader'>Scenario</h4>
                 <%- include(vuln_scenario) %>
 
-                <h4>Change Security Rating</h4>
+
+                <% if (securityRating == null) { %>
+                    <h4 id='vuln_subheader'>Security Rating Feature Not Available</h4>
+                <% } else {%> 
+                    <h4 id='vuln_subheader'>Change Security Rating</h4>
+                    <h5 id='sc_indicator1'>
+                        The security rating for <%=vuln_title%> is <%= securityRating %>.  
+                    </h5>
+                <% } %>
                 <% include ../common/ratingChooser %>
-            
-                <h4>Overview</h4>
+
+                <h4 id='vuln_subheader'>Overview</h4>
                 <%- include(vuln_description) %>
             
-                <h4>Reference</h4>
+                <h4 id='vuln_subheader'>Reference</h4>
                 <%- include(vuln_reference) %>
         </div>
     </div>

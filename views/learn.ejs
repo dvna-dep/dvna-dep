@@ -38,34 +38,76 @@
                 <% } else if (messages.info) {%> 
                     <div class="alert alert-info"><%= messages.info %></div>
                 <% } %>                
-                <h3>Welcome to <strong>the DVNA-DEP Application</strong></h3>
+                <h3><strong>Welcome to the DVNA-DEP Application</strong></h3>
                 <p>The <i>DVNA</i> of the DVNA-DEP stands for "Damn Vulnerable NodeJS Application."  
                     The <i>DEP</i> stands for "Dan", "Elaine", and "Patrick", the three developers of this app. 
-                    This is actually an expanded version of the <a href="https://github.com/appsecco/dvna">DVNA developed by Appsecco. 
+                    This is actually an expanded version of the <a href="https://github.com/appsecco/dvna" target="_blank" rel="noopener noreferrer">DVNA developed by Appsecco. 
                     </a>
     
-                    <br><br>The original Appsecco DVNA implements a set of intentionally vulnerable functions in NodeJS for learning purpose.
-                Much like the original DVNA, you can start by selecting one of the vulnerability class from the left menu or select one of the link below </p>
+                    <br><br>The original Appsecco DVNA implements a set of intentionally vulnerable classes in NodeJS for learning purpose.
+                Much like the original DVNA, you can start by selecting one of the vulnerable classes from the left menu or select one of the links below </p>
 
-                Our DVNA-DEP app merely builds on their work, and adds some UI features (to toggle between different security features) and add some extra security features found in the original app.<Br><br>
-                <h4>OWASP Top 10 2017</h4>
-                <ul>
-                    
-                    <% for (var vulnKey in vulnerabilities) { %>
-                        <% if (vulnKey[1]!='x') { %>
-                        <li><a href='/learn/vulnerability/<%=vulnKey%>'> <%=vulnerabilities[vulnKey]%> </a></li>
-                        <% } %>
-                    <% } %>
-                </ul>
-                <h4>OWASP Top 10 2013</h4>
-                <ul>
-                    <% for (var vulnKey in vulnerabilities) { %>
-                        <% if (vulnKey[1]=='x') { %>
-                        <li><a href='/learn/vulnerability/<%=vulnKey%>'> <%=vulnerabilities[vulnKey]%> </a></li>
-                        <% } %>
-                    <% } %>
-                </ul>
+                Our DVNA-DEP app merely builds on Appsecco's work. Using the original DVNA as our base code, we coded security features directly into 
+                our app (for OWASP Top 10 2017 A1 to A6 vulnerability classes).  
+                And for those vulnerabilities (A1 to A6), we implemented UI 
+                to toggle between the original vulnerable class (security rating 0), and the newly secured class (security rating 1).
+                We also added some security features not found in the original DVNA, such as (i) enforcing users to choose stronger passwords; and (ii) ability to
+                choose different password encryptions and salt them.  
+                <br><br>
+                We documented all our findings and work in our  <a href="https://dvna-dep.gitbook.io/dvna-dep" target="_blank" rel="noopener noreferrer">DVNA-DEP security guide. 
+                </a>.  The security guide, which covers classes A1 to A6 and password hash/salt, is also a major part of our project.
+                It delves into those security issues much deeper than the <a href='https://appsecco.com/books/dvna-developers-security-guide/' target="_blank" rel="noopener noreferrer">original Appsecco security guide</a>.  Further, it contains information on
+                installing and using the DVNA-DEP app.    
+                <Br><br>
+
+                <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>OWASP Top 10 2017</h4>
+                        <h6>Note: DVNA-DEP only expanded A1 to A6 sections below. The rest work exactly the same as the original DVNA</h6>
+                        <ul>
+                            
+                            <% for (var vulnKey in vulnerabilities) { %>
+                                <% if (vulnKey[1]!='x') { %>
+                                <li><a href='/learn/vulnerability/<%=vulnKey%>'> <%=vulnerabilities[vulnKey]%> </a></li>
+                                <% } %>
+                            <% } %>
+                        </ul>               
+                    </div>
+                    <div class="col-md-4">
+                        <h4>OWASP Top 10 2013</h4>
+                        <h6>Note: DVNA-DEP did not expand below sections. They work exactly the same as the original DVNA.</h6>
+                        <ul>
+                            <% for (var vulnKey in vulnerabilities) { %>
+                                <% if (vulnKey[1]=='x') { %>
+                                <li><a href='/learn/vulnerability/<%=vulnKey%>'> <%=vulnerabilities[vulnKey]%> </a></li>
+                                <% } %>
+                            <% } %>
+                        </ul>       
+                    </div>
+                    <div class="col-md-4">
+                        <h4>External Links</h4>
+                        <h5>DVNA-DEP</h5>
+                        <ul>
+                            <li><a href='https://github.com/dvna-dep/dvna-dep' target="_blank" rel="noopener noreferrer">DVNA-DEP on github</a></li>
+                            <li><a href='https://dvna-dep.gitbook.io/dvna-dep/' target="_blank" rel="noopener noreferrer">DVNA-DEP Security Guide</a></li>
+                        </ul>
+                        <h5>The Original Appsecco DVNA</h5>
+                        <ul>
+                            <li><a href='https://github.com/appsecco/dvna' target="_blank" rel="noopener noreferrer">Appsecco DVNA on github</a></li>
+                            <li><a href='https://appsecco.com/books/dvna-developers-security-guide/' target="_blank" rel="noopener noreferrer">Appsecco DVNA Security Guide</a></li>
+                        </ul>
+                        <h5>OWASP</h5>
+                        <ul>
+                            <li><a href='https://owasp.org/www-project-top-ten/' target="_blank" rel="noopener noreferrer">OWASP Top 10 (official site)</a></li>
+                        </ul>
+
+                    </div>
+
+                </div>
             </div>
+           </div>
         </div>
 
     </div></div></div>

@@ -34,8 +34,14 @@ module.exports.isAdmin = function (req, res, next) {
 
 module.exports.initializeRatingState = function (req, res, next) {
   var initialRatingState = {};
+  var i = 0;
   Object.keys(ratings).forEach(rating => {
-    initialRatingState[rating] = 0
+    if(5 < i && i < 12){
+      initialRatingState[rating] = null
+    }else{
+      initialRatingState[rating] = 0
+    }
+    i++;
   });
   if (req.session && !req.session.ratingState) {
     req.session.ratingState = initialRatingState;

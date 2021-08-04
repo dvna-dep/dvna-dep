@@ -127,6 +127,59 @@ module.exports = function (passport) {
             process.nextTick(findOrCreateUser)
         }));
 
+
+        passport.use('signupadmin', new LocalStrategy({
+            passReqToCallback: true
+        },
+        function (req, username, password, done) {
+            findOrCreateUser = function () {
+                db.User.findOne({
+                    where: {
+                        'email': req.body.email
+                    }
+                }).then(function (user) {
+                    if (user) {
+                        return done(null, false, req.flash('danger', 'Account Already Exists'));
+                    } else {
+                        if(req.body.securityRating == 1){ // Level 1: validate input
+                            if(!vh.vEmail(req.body.email)){
+                                return done(null, false, req.flash('danger', 'Invalid Email'));
+                            };
+                            if(!vh.vPassword(req.body.password)){
+                                return done(null, false, req.flash('danger', badPWmsg));
+                            };
+                        };
+                        if (req.body.email && req.body.password && req.body.username && req.body.cpassword && req.body.name && req.body.pwLevel) {
+                            if (req.body.cpassword == req.body.password) {
+                                var saltStr = '';
+                                if (req.body.salt == 'true'){
+                                    saltStr = genRandomString(SALT_LENGTH);
+                                    password += saltStr; 
+                                };
+                                db.User.create({
+                                    email: req.body.email,
+                                    password: createHash(password, req.body.pwLevel),
+                                    name: req.body.name,
+                                    login: username,
+                                    hashtype: hashTypes[req.body.pwLevel],
+                                    role: 'admin',
+                                    salt: saltStr
+                                }).then(function (user) {
+                                    return done(null, user)
+                                })
+                            } else {
+                                return done(null, false, req.flash('danger', 'Passwords do not match'));
+                            }
+                        } else {
+                            return done(null, false, req.flash('danger', 'Input field(s) missing'));
+                        }
+                    }
+                });
+            };
+            process.nextTick(findOrCreateUser)
+        }));
+        
+        
     // level corresponds to cracking difficult (0 for easiest, 4 for hardest)
     var createHash = function (password, level) {
         switch(level) {

@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+    <% include common/head %>
+</head>
+<body>
+    <% include common/navigation %>
+    <div class='container' style='min-height: 450px'><div class='row'><div class='col-md-12'>
+
+        <div class='row'>
+            <div class='col-md-6 col-md-offset-3'>
+                <div class='page-header'>
+                    <h2>Create Admin User</h2>
+                </div>
+
+                <% if (messages.success) { %>
+                    <div class="alert alert-success"><%=messages.success%></div>
+                <% } else if (messages.danger) { %>
+                    <div class="alert alert-danger"><%- messages.danger %></div>
+                <% } else if (messages.warning) {%> 
+                    <div class="alert alert-warning"><%= messages.warning %></div>
+                <% } else if (messages.info) {%> 
+                    <div class="alert alert-info"><%= messages.info %></div>
+                <% } %>
+
+                <div class='page-body'>
+                    <form id="createAdmin" name="createAdmin" action="/createAdmin" method="post">
+                        <fieldset>
+
+                            <div class="form-group ">
+                                <label class="  control-label" for="register_name">Name </label>
+                                <div class="  controls">
+
+                                    <input type="text" name="name" value="" id="register_name" class="form-control" placeholder="Enter full name" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group ">
+                                <label class="  control-label" for="register_login">Login </label>
+                                <div class="  controls">
+
+                                    <input type="text" name="username" value="" id="register_login" class="form-control" placeholder="Enter username"<%if (securityRating > 0) { %>required<% } %>/></div>
+                            </div>
+
+
+                            <div class="form-group ">
+                                <label class="  control-label" for="register_email">Email </label>
+                                <div class="  controls">
+
+                                    <input type="text" name="email" value="" id="register_email" class="form-control" placeholder="Enter email address" />
+                                </div>
+                            </div>
+
+
+                            <div class="form-group ">
+                                <label class="  control-label" for="register_password">Password </label>
+                                <div class="  controls">
+
+                                    <input type="password" name="password" id="register_password" class="form-control" placeholder="Enter password"<%if (securityRating > 0) { %>required<% } %>/>
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <label class="  control-label" for="register_passwordConfirmation">Password Confirmation </label>
+                                <div class="  controls">
+
+                                    <input type="password" name="cpassword" id="register_passwordConfirmation" class="form-control" placeholder="Confirm password" />
+                                </div>
+                            </div>
+                            
+                            <div class="form-group ">
+                                <label class="  control-label" for="register_passwordConfirmation">Password Level </label>
+                                <div class="  controls">
+                                    <select class="selectHash" data-style="btn-info" name="pwLevel">
+                                        <optgroup label="Choose Hash">
+                                            <option name="" value="4">bCrypt (includes a salt by default)</option>
+                                            <option name="" value="3">SHA512</option>
+                                            <option name="" value="2">SHA256</option>
+                                            <option name="" value="1">SHA1</option>
+                                            <option name="" value="0">MD5</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-check form-switch form-group">
+                                <div class=" controls">
+                                    <input class="form-check-input" type="checkbox" id="saltSwitch" name="salt" value=true>
+                                    <label class="control-label form-check-label" for="saltSwitch">Add Salt</label>
+                                </div>
+                            </div>
+
+
+                            <input type="hidden" id="securityRating" name="securityRating" value= <%= securityRating %>>
+
+                            <input type="submit" value="Submit" id="register_0" class="btn btn-primary" />
+
+                        </fieldset>
+                    </form>
+
+
+                    <script type="text/javascript">
+                        if (typeof jQuery != 'undefined') {
+                            if (typeof jQuery.fn.tooltip == 'function') {
+                                jQuery('i.s2b_tooltip').tooltip();
+                            }
+                        }
+                    </script>
+
+
+                    <br/>
+                    <a href='/login'>Already registered? Login here</a>                
+                </div>
+            </div>
+         </div>
+
+         <h4>The Current Security Rating is <%= securityRating %></h4>
+         <h4>Change Security Rating</h4>
+         <% include common/ratingChooser %>
+
+    </div></div></div>
+    <% include common/footer %>
+</body>
+</html>
