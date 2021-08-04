@@ -8,7 +8,7 @@
     <div class='container' style='min-height: 450px'><div class='row'><div class='col-md-12'>
 
         <h2>
-            <i class='fa fa-upload'></i> Bulk Import Products
+            <i class='fa fa-upload'></i> Bulk Import Products - Level <%= securityRating %>
         </h2>
 
         <% if (messages.success) { %>
@@ -28,6 +28,8 @@
                     <div class="products-file">
                         <input type="file" name="products" class="file-input" id="inputfile" <% if(!legacy){ %> accept=".xml" <% } %>>
                         <br>
+                        <input type="hidden" id="securityRating" name="securityRating" value= <%= securityRating %>>
+                        
                         <input class="button" type="submit" name="submit" value="Upload">
                     </div>
                 </div>
