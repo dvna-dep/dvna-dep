@@ -22,7 +22,10 @@ module.exports = function () {
   });
 
   router.get("/bulkproducts", authHandler.isAuthenticated, authHandler.initializeRatingState, function (req, res) {
-    res.render("app/bulkproducts", { legacy: req.query.legacy });
+    res.render("app/bulkproducts", { 
+      securityRating: req.query.securityRating,
+      legacy: req.query.legacy 
+    });
   });
 
   router.get("/products", authHandler.isAuthenticated, authHandler.initializeRatingState, appHandler.listProducts);
