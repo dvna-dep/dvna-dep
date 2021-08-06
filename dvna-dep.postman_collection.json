@@ -1,0 +1,2514 @@
+{
+	"info": {
+		"_postman_id": "7a3b376a-8f4d-41a8-81f4-eed46bc5785e",
+		"name": "dvna-dep",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Smoke Tests",
+			"item": [
+				{
+					"name": "Get Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/register",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test@test.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Th3T3st!",
+									"type": "text"
+								},
+								{
+									"key": "cpassword",
+									"value": "Th3T3st!",
+									"type": "text"
+								},
+								{
+									"key": "pwLevel",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/register",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 302', ()=>pm.response.to.have.status(302));",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Th3T3st!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:9090/login",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a1_injection",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a1_injection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a2_broken_auth",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a2_broken_auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a3_sensitive_data",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a3_sensitive_data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A4",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a4_xxe",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a4_xxe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A5",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a5_broken_access_control",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a5_broken_access_control"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A6",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a6_sec_misconf",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a6_sec_misconf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A7",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a7_xss",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a7_xss"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A8",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a8_ides",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a8_ides"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A9",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a9_vuln_component",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a9_vuln_component"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A10",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a10_logging",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a10_logging"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A10_2013",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/ax_redirect",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"ax_redirect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A8_2013",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/ax_csrf",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"ax_csrf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "A1 Tests",
+			"item": [
+				{
+					"name": "Get A1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a1_injection",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a1_injection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A1 Security Rating 0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a1_injection?securityRating=0",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a1_injection"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A1 Security Rating 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a1_injection?securityRating=1",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a1_injection"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post A1 User Search 0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));\r",
+									"console.log(pm.response);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login",
+									"value": "' UNION SELECT password,1 from Users WHERE login='dvna'#",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/app/usersearch?securityRating=0",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"usersearch"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post A1 User Search 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));\r",
+									"console.log(pm.response);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login",
+									"value": "dvna",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/app/usersearch?securityRating=1",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"usersearch"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post A1 Ping 0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));\r",
+									"console.log(pm.response);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "address",
+									"value": "192.168.0.192 | ls -la",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/app/ping?securityRating=0",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"ping"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post A1 Ping 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));\r",
+									"console.log(pm.response);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "address",
+									"value": "www.google.com",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/app/ping?securityRating=1",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"ping"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "A2 Tests",
+			"item": [
+				{
+					"name": "Get A2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a2_broken_auth",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a2_broken_auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A2 Security Rating 0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a2_broken_auth?securityRating=0",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a2_broken_auth"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get A2 Security Rating 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a2_broken_auth?securityRating=1",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a2_broken_auth"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post A2 Reset PW 0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));\r",
+									"\r",
+									"const response = pm.response;\r",
+									"\r",
+									"console.log(response);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{cookie}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "login",
+									"value": "user",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/forgotpw?securityRating=0",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"forgotpw"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "A3 Tests",
+			"item": [
+				{
+					"name": "set A3 to insecure",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a3_sensitive_data?securityRating=0",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a3_sensitive_data"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test insecure app/admin/usersapi/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));",
+									"pm.test(\"users contain passwords\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.users[0]).to.have.property(\"password\")",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/app/admin/usersapi",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"admin",
+								"usersapi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "set A3 to secure",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a3_sensitive_data?securityRating=1",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a3_sensitive_data"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test secure app/admin/usersapi/ Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));",
+									"pm.test(\"users do not contain passwords\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.users[0]).to.not.have.property(\"password\")",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/app/admin/usersapi",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"admin",
+								"usersapi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "A5 Tests",
+			"item": []
+		},
+		{
+			"name": "A6 Tests",
+			"item": [
+				{
+					"name": "test insecure calc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a6_sec_misconf?securityRating=0",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a6_sec_misconf"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test insecure calc input",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 500', () => pm.response.to.have.status(500));",
+									"pm.test(\"Body contains stack trace\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Error: Undefined symbol hello\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "eqn",
+									"value": "hello",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/app/calc",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"calc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test secure calc",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/learn/vulnerability/a6_sec_misconf?securityRating=1",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"learn",
+								"vulnerability",
+								"a6_sec_misconf"
+							],
+							"query": [
+								{
+									"key": "securityRating",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test secure calc input",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));",
+									"pm.test(\"Body does not contain stack trace\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"Error: Undefined symbol hello\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "eqn",
+									"value": "hello",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/app/calc",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"calc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "hashing",
+			"item": [
+				{
+					"name": "Logout Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register user with hash 0, sr0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hash0sr0",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "hash0sr0",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "hash0sr0",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash0sr0",
+									"type": "text"
+								},
+								{
+									"key": "cpassword",
+									"value": "hash0sr0",
+									"type": "text"
+								},
+								{
+									"key": "pwLevel",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/register",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Copy 2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login with hash 0, sr0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "hash0sr0",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash0sr0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:9090/login",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Copy 3",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register user with hash 1, sr0, salt Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hash1sr0",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "hash1sr0",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "hash1sr0",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash1sr0",
+									"type": "text"
+								},
+								{
+									"key": "cpassword",
+									"value": "hash1sr0",
+									"type": "text"
+								},
+								{
+									"key": "pwLevel",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "salt",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/register",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user with hash 1, sr0 (salted)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "hash1sr0",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash1sr0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:9090/login",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Copy 4",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register user with hash 2, sr1, salt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hash2sr1",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "hash2sr1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "hash2sr1@hash2sr1.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash2sr1A!",
+									"type": "text"
+								},
+								{
+									"key": "cpassword",
+									"value": "hash2sr1A!",
+									"type": "text"
+								},
+								{
+									"key": "pwLevel",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "salt",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/register",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user with hash 2, sr1 (salted)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "hash2sr1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash2sr1A!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:9090/login",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Copy 5",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register user with hash 3, sr1, salt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hash3sr1",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "hash3sr1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "hash3sr1@hash3sr1.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash3sr1A!",
+									"type": "text"
+								},
+								{
+									"key": "cpassword",
+									"value": "hash3sr1A!",
+									"type": "text"
+								},
+								{
+									"key": "pwLevel",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "salt",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/register",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user with hash 3, sr1 (salted)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "hash3sr1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash3sr1A!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/login",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Copy 6",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register user with hash 4, sr0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "hash3sr1",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "hash4sr0",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "hash4sr0",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash4sr0",
+									"type": "text"
+								},
+								{
+									"key": "cpassword",
+									"value": "hash4sr0",
+									"type": "text"
+								},
+								{
+									"key": "pwLevel",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "salt",
+									"value": "''",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/register",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user with hash 4, sr0",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "hash4sr0",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "hash4sr0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/login",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout Copy 7",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cleanup",
+			"item": [
+				{
+					"name": "delete all users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/app/reset-db",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"reset-db"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tests requiring admin user",
+			"item": [
+				{
+					"name": "register user (change role manually to admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Redirect to learn', ()=>pm.response.to.have.status(302));",
+									"pm.test(\"Body is correct\", function () {",
+									"    pm.response.to.have.body(\"Found. Redirecting to /learn\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "passw0rd",
+									"type": "text"
+								},
+								{
+									"key": "cpassword",
+									"value": "passw0rd",
+									"type": "text"
+								},
+								{
+									"key": "pwLevel",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "securityRating",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{app_url}}/register",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{app_url}}/logout",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login with admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 302', ()=>pm.response.to.have.status(302));",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "passw0rd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:9090/login",
+							"host": [
+								"localhost"
+							],
+							"port": "9090",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "A3 test secure app/admin/usersapi/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('status code 200', ()=>pm.response.to.have.status(200));",
+									"// pm.test(\"users do not contain passwords\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.users[0]).to.not.have.property(\"password\")",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{app_url}}/app/admin/usersapi",
+							"host": [
+								"{{app_url}}"
+							],
+							"path": [
+								"app",
+								"admin",
+								"usersapi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
